@@ -26,9 +26,12 @@ import {
   type BookingListItem,
   type BookingStatus,
 } from '../api/bookings';
+import { getAdminDashboard, type AdminDashboardResponse } from '../api/dashboard';
 import { getCookie } from '../utils/cookies';
 import { toast } from './Toast';
 import AccountMenu from './AccountMenu';
+import SidebarProfileCard from './SidebarProfileCard';
+import WeeklyTrendChart from './WeeklyTrendChart';
 import { getInitials, formatFollowers } from '../utils/format';
 
 type View = 'overview' | 'users' | 'bookings';
@@ -158,13 +161,34 @@ export default function AdminDashboard() {
   const [updatingBookingId, setUpdatingBookingId] = useState<string | null>(null);
   const [updatingBookingAction, setUpdatingBookingAction] = useState<BookingStatus | null>(null);
 
+  const [dashboard, setDashboard] = useState<AdminDashboardResponse | null>(null);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState('');
+
   useEffect(() => {
     if (!getCookie('access_token')) {
       window.location.assign('/');
       return;
     }
     loadCreators();
+    loadDashboard();
   }, []);
+
+  function loadDashboard() {
+    setDashboardLoading(true);
+    setDashboardError('');
+    getAdminDashboard()
+      .then(setDashboard)
+      .catch((err) => {
+        console.error('Failed to load admin dashboard:', err);
+        if (String(err.message).includes('401') || String(err.message).includes('403')) {
+          window.location.assign('/');
+          return;
+        }
+        setDashboardError("Couldn't load dashboard stats. Please try again.");
+      })
+      .finally(() => setDashboardLoading(false));
+  }
 
   useEffect(() => {
     if (view === 'bookings' && !bookingsLoaded) {
@@ -254,15 +278,6 @@ export default function AdminDashboard() {
     });
   }, [creators, query, status]);
 
-  const counts = useMemo(() => {
-    return {
-      total: creators.length,
-      pending: creators.filter((c) => c.status.toUpperCase() === 'PENDING').length,
-      approved: creators.filter((c) => c.status.toUpperCase() === 'APPROVED').length,
-      rejected: creators.filter((c) => c.status.toUpperCase() === 'REJECTED').length,
-    };
-  }, [creators]);
-
   async function handleSetStatus(id: string, next: CreatorStatus) {
     setUpdatingId(id);
     try {
@@ -281,16 +296,15 @@ export default function AdminDashboard() {
   return (
     <div className="admin">
       <div className="admin-topbar">
-        <div className="admin-wrap admin-topbar-in">
+        <div className="admin-topbar-in admin-topbar-full">
           <div className="logo">
-            <img src="/logo-icon-light.png" alt="" className="logo-mark" width={30} height={25} />
-            Admin
+            <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
           </div>
           <AccountMenu />
         </div>
       </div>
 
-      <div className="admin-wrap admin-shell">
+      <div className="admin-shell">
         <aside className="admin-sidebar">
           <button
             type="button"
@@ -306,7 +320,7 @@ export default function AdminDashboard() {
             onClick={() => setView('users')}
           >
             <Users size={17} strokeWidth={2} style={{ border: 'none' }} />
-            User list
+            Creator list
           </button>
           <button
             type="button"
@@ -316,63 +330,122 @@ export default function AdminDashboard() {
             <CalendarCheck size={17} strokeWidth={2} style={{ border: 'none' }} />
             Booking requests
           </button>
+
+          <SidebarProfileCard />
         </aside>
 
         <div className="admin-main">
-          {view !== 'bookings' && loading && <p className="admin-sub">Loading creators…</p>}
           {view !== 'bookings' && !loading && loadError && <p className="admin-sub">{loadError}</p>}
 
-          {!loading && !loadError && view === 'overview' && (
+          {view === 'overview' && (
             <>
               <h1 className="admin-title">Overview</h1>
               <p className="admin-sub">A quick look at the creator network.</p>
-              <div className="admin-stats">
-                <div className="admin-stat admin-stat-total">
-                  <Users size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
-                  <b>{counts.total}</b>
-                  <span>Total</span>
-                </div>
-                <div className="admin-stat admin-stat-pending">
-                  <Clock size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
-                  <b>{counts.pending}</b>
-                  <span>Pending</span>
-                </div>
-                <div className="admin-stat admin-stat-approved">
-                  <CheckCircle2 size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
-                  <b>{counts.approved}</b>
-                  <span>Approved</span>
-                </div>
-                <div className="admin-stat admin-stat-rejected">
-                  <XCircle size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
-                  <b>{counts.rejected}</b>
-                  <span>Rejected</span>
-                </div>
-              </div>
+
+              {!dashboardLoading && dashboardError && <p className="admin-sub">{dashboardError}</p>}
+
+              {!dashboardError && (
+                <>
+                  <div className="admin-stats">
+                    {dashboardLoading || !dashboard
+                      ? Array.from({ length: 4 }, (_, i) => (
+                          <div key={i} className="admin-stat admin-stat-skel">
+                            <div className="admin-skel-icon" />
+                            <div className="admin-skel-num" />
+                            <div className="admin-skel-label" />
+                          </div>
+                        ))
+                      : (
+                        <>
+                          <div className="admin-stat admin-stat-total">
+                            <Users size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
+                            <b>{dashboard.creators.total}</b>
+                            <span>Total</span>
+                          </div>
+                          <div className="admin-stat admin-stat-pending">
+                            <Clock size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
+                            <b>{dashboard.creators.pending}</b>
+                            <span>Pending</span>
+                          </div>
+                          <div className="admin-stat admin-stat-approved">
+                            <CheckCircle2 size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
+                            <b>{dashboard.creators.approved}</b>
+                            <span>Approved</span>
+                          </div>
+                          <div className="admin-stat admin-stat-rejected">
+                            <XCircle size={26} strokeWidth={1.8} className="stat-icon" style={{ border: 'none' }} />
+                            <b>{dashboard.creators.rejected}</b>
+                            <span>Rejected</span>
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  <p className="admin-section-label">Bookings</p>
+                  <div className="admin-mini-stats">
+                    {dashboardLoading || !dashboard
+                      ? Array.from({ length: 5 }, (_, i) => (
+                          <div key={i} className="admin-mini-stat">
+                            <div className="admin-skel-num" />
+                            <div className="admin-skel-label" />
+                          </div>
+                        ))
+                      : (
+                        <>
+                          <div className="admin-mini-stat">
+                            <b>{dashboard.bookings.total}</b>
+                            <span>Total</span>
+                          </div>
+                          <div className="admin-mini-stat">
+                            <b>{dashboard.bookings.pending}</b>
+                            <span>Pending</span>
+                          </div>
+                          <div className="admin-mini-stat">
+                            <b>{dashboard.bookings.accepted}</b>
+                            <span>Accepted</span>
+                          </div>
+                          <div className="admin-mini-stat">
+                            <b>{dashboard.bookings.declined}</b>
+                            <span>Declined</span>
+                          </div>
+                          <div className="admin-mini-stat">
+                            <b>{dashboard.bookings.cancelled}</b>
+                            <span>Cancelled</span>
+                          </div>
+                        </>
+                      )}
+                  </div>
+
+                  {dashboard && dashboard.weeklyTrend.length > 0 && <WeeklyTrendChart data={dashboard.weeklyTrend} />}
+                </>
+              )}
             </>
           )}
 
-          {!loading && !loadError && view === 'users' && (
+          {!loadError && view === 'users' && (
             <>
-              <h1 className="admin-title">User list</h1>
+              <h1 className="admin-title">Creator list</h1>
               <p className="admin-sub">Review and manage creator applications.</p>
 
-              <div className="admin-controls">
-                <div className="admin-search">
-                  <Search size={16} strokeWidth={2} style={{ border: 'none' }} />
-                  <input
-                    placeholder="Search name, email or handle…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
+              {!loading && (
+                <div className="admin-controls">
+                  <div className="admin-search">
+                    <Search size={16} strokeWidth={2} style={{ border: 'none' }} />
+                    <input
+                      placeholder="Search name, email or handle…"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                  </div>
+                  <div className="filters">
+                    {statusFilters.map((s) => (
+                      <button key={s} className={`chip ${status === s ? 'on' : ''}`} onClick={() => setStatus(s)}>
+                        {s}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="filters">
-                  {statusFilters.map((s) => (
-                    <button key={s} className={`chip ${status === s ? 'on' : ''}`} onClick={() => setStatus(s)}>
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              )}
 
               <div className="admin-table-wrap">
                 <table className="admin-table">
@@ -386,32 +459,56 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map((c) => (
-                      <tr key={c.id}>
-                        <td>
-                          <span className="admin-row-avatar">
-                            {c.avatarUrl ? <img src={c.avatarUrl} alt="" /> : getInitials(c.fullName)}
-                          </span>
-                        </td>
-                        <td>{c.fullName}</td>
-                        <td>{c.email}</td>
-                        <td>
-                          <StatusBadge status={c.status} />
-                        </td>
-                        <td>
-                          <button className="btn btn-ghost admin-view-btn" onClick={() => setSelected(c)}>
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {!filtered.length && (
-                      <tr>
-                        <td colSpan={5} className="admin-empty">
-                          No creators match your filters.
-                        </td>
-                      </tr>
-                    )}
+                    {loading
+                      ? Array.from({ length: 5 }, (_, i) => (
+                          <tr key={i}>
+                            <td>
+                              <span className="admin-row-avatar admin-row-skel-avatar" />
+                            </td>
+                            <td>
+                              <div className="admin-skel-bar w-70" />
+                            </td>
+                            <td>
+                              <div className="admin-skel-bar w-50" />
+                            </td>
+                            <td>
+                              <div className="admin-skel-pill" />
+                            </td>
+                            <td>
+                              <div className="admin-skel-btn" />
+                            </td>
+                          </tr>
+                        ))
+                      : (
+                        <>
+                          {filtered.map((c) => (
+                            <tr key={c.id}>
+                              <td>
+                                <span className="admin-row-avatar">
+                                  {c.avatarUrl ? <img src={c.avatarUrl} alt="" /> : getInitials(c.fullName)}
+                                </span>
+                              </td>
+                              <td>{c.fullName}</td>
+                              <td>{c.email}</td>
+                              <td>
+                                <StatusBadge status={c.status} />
+                              </td>
+                              <td>
+                                <button className="btn btn-ghost admin-view-btn" onClick={() => setSelected(c)}>
+                                  View
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                          {!filtered.length && (
+                            <tr>
+                              <td colSpan={5} className="admin-empty">
+                                No creators match your filters.
+                              </td>
+                            </tr>
+                          )}
+                        </>
+                      )}
                   </tbody>
                 </table>
               </div>
@@ -423,32 +520,33 @@ export default function AdminDashboard() {
               <h1 className="admin-title">Booking requests</h1>
               <p className="admin-sub">Review and manage creator booking requests.</p>
 
-              {bookingsLoading && <p className="admin-sub">Loading booking requests…</p>}
               {!bookingsLoading && bookingsError && <p className="admin-sub">{bookingsError}</p>}
 
-              {!bookingsLoading && !bookingsError && (
+              {!bookingsError && (
                 <>
-                  <div className="admin-controls">
-                    <div className="admin-search">
-                      <Search size={16} strokeWidth={2} style={{ border: 'none' }} />
-                      <input
-                        placeholder="Search creator, name or email…"
-                        value={bookingQuery}
-                        onChange={(e) => setBookingQuery(e.target.value)}
-                      />
+                  {!bookingsLoading && (
+                    <div className="admin-controls">
+                      <div className="admin-search">
+                        <Search size={16} strokeWidth={2} style={{ border: 'none' }} />
+                        <input
+                          placeholder="Search creator, name or email…"
+                          value={bookingQuery}
+                          onChange={(e) => setBookingQuery(e.target.value)}
+                        />
+                      </div>
+                      <div className="filters">
+                        {bookingStatusFilters.map((s) => (
+                          <button
+                            key={s}
+                            className={`chip ${bookingStatus === s ? 'on' : ''}`}
+                            onClick={() => setBookingStatus(s)}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <div className="filters">
-                      {bookingStatusFilters.map((s) => (
-                        <button
-                          key={s}
-                          className={`chip ${bookingStatus === s ? 'on' : ''}`}
-                          onClick={() => setBookingStatus(s)}
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  )}
 
                   <div className="admin-table-wrap">
                     <table className="admin-table">
@@ -463,7 +561,35 @@ export default function AdminDashboard() {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredBookings.map((b) => (
+                        {bookingsLoading &&
+                          Array.from({ length: 5 }, (_, i) => (
+                            <tr key={i}>
+                              <td>
+                                <div className="admin-row-creator">
+                                  <span className="admin-row-avatar admin-row-skel-avatar" />
+                                  <div>
+                                    <div className="admin-skel-bar w-70" />
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-50" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-70" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-pill" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-50" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-btn" />
+                              </td>
+                            </tr>
+                          ))}
+                        {!bookingsLoading && filteredBookings.map((b) => (
                           <tr key={b.id}>
                             <td>
                               {b.creator ? (
@@ -523,7 +649,7 @@ export default function AdminDashboard() {
                             </td>
                           </tr>
                         ))}
-                        {!filteredBookings.length && (
+                        {!bookingsLoading && !filteredBookings.length && (
                           <tr>
                             <td colSpan={6} className="admin-empty">
                               No booking requests match your filters.

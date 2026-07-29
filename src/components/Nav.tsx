@@ -21,8 +21,7 @@ export default function Nav() {
     <nav>
       <div className={`${WRAP} nav-in`}>
         <div className="logo">
-          <img src="/logo-icon-light.png" alt="" className="logo-mark" width={34} height={28} />
-          THE BUZZ PULSE
+          <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
         </div>
         <div className="nav-links">
           <a href="#creators">Creators</a>

@@ -187,8 +187,7 @@ export default function CreatorDashboard() {
       <div className="admin-topbar">
         <div className="admin-wrap admin-topbar-in">
           <div className="logo">
-            <img src="/logo-icon-light.png" alt="" className="logo-mark" width={30} height={25} />
-            Creator
+            <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
           </div>
           <AccountMenu />
         </div>

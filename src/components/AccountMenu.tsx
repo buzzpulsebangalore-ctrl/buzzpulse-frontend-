@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { deleteCookie } from '../utils/cookies';
+import { deleteCookie, getCookie } from '../utils/cookies';
 import ChangePasswordModal from './ChangePasswordModal';
 
 export default function AccountMenu() {
   const [open, setOpen] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const label = getCookie('role') === 'ADMIN' ? 'Admin Account' : 'Creator Account';
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -19,13 +20,15 @@ export default function AccountMenu() {
   function logout() {
     deleteCookie('access_token');
     deleteCookie('role');
+    deleteCookie('fullName');
+    deleteCookie('email');
     window.location.assign('/');
   }
 
   return (
     <div className="account-menu" ref={ref}>
       <button type="button" className="account-menu-trigger" onClick={() => setOpen((o) => !o)}>
-        Account
+        {label}
         <ChevronDown size={14} strokeWidth={2} style={{ border: 'none' }} />
       </button>
 

@@ -39,6 +39,8 @@ export default function LoginModal({ onClose }: Props) {
       const res = await login({ email: email.trim(), password });
       setCookie('access_token', res.access_token);
       setCookie('role', res.user.role);
+      setCookie('fullName', res.user.fullName || res.user.email);
+      setCookie('email', res.user.email);
       const displayName = res.user.fullName?.trim().split(' ')[0] || res.user.email;
       toast(`Welcome back, ${displayName}!`, 'success');
       onClose();
