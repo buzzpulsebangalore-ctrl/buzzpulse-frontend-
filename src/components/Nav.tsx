@@ -2,13 +2,20 @@ import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { WRAP } from '../styles';
 import LoginModal from './LoginModal';
+import { getCookie } from '../utils/cookies';
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 }
 
+function goToDashboard() {
+  const role = getCookie('role');
+  window.location.assign(role === 'ADMIN' ? '/admin' : '/creator');
+}
+
 export default function Nav() {
   const [showLogin, setShowLogin] = useState(false);
+  const loggedIn = !!getCookie('access_token');
 
   return (
     <nav>
@@ -24,11 +31,11 @@ export default function Nav() {
           <a href="#join">Join</a>
         </div>
         <div className="nav-actions">
-          <button className="btn" onClick={() => scrollTo('join')}>
+          <button className="btn" onClick={() => (loggedIn ? goToDashboard() : scrollTo('join'))}>
             Become a Creator
           </button>
-          <button className="btn" onClick={() => setShowLogin(true)}>
-            Login
+          <button className="btn" onClick={() => (loggedIn ? goToDashboard() : setShowLogin(true))}>
+            {loggedIn ? 'Dashboard' : 'Login'}
           </button>
         </div>
         <button className="menu-btn" aria-label="Menu">

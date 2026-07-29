@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
 import { signupNiches } from '../data';
+import { applyCreator } from '../api/creators';
 
 interface Errors {
   e1: boolean;
@@ -15,24 +16,32 @@ export default function SignupForm() {
   const [fn, setFn] = useState('');
   const [ct, setCt] = useState('');
   const [em, setEm] = useState('');
+  const [pw, setPw] = useState('');
   const [platform, setPlatform] = useState('Instagram');
-  const [hd, setHd] = useState('');
-  const [followers, setFollowers] = useState('1K – 10K (Nano)');
+  const [hd, setHd] = useState('@');
+  const [followers, setFollowers] = useState('');
   const [errors, setErrors] = useState<Errors>(noErrors);
   const [selectedNiches, setSelectedNiches] = useState<string[]>([]);
   const [doneMsg, setDoneMsg] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
+  function isStrongPassword(value: string) {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(value);
+  }
 
   function go(n: number) {
     setErrors(noErrors);
     if (n === 2) {
-      const ok = fn.trim() && ct.trim() && em.includes('@');
+      const ok = fn.trim() && em.includes('@') && isStrongPassword(pw);
       if (!ok) {
         setErrors((prev) => ({ ...prev, e1: true }));
         return;
       }
     }
     if (n === 3) {
-      if (!hd.trim()) {
+      const ok = hd.trim().length > 1 && ct.trim() && /^\d+[KM]?$/.test(followers);
+      if (!ok) {
         setErrors((prev) => ({ ...prev, e2: true }));
         return;
       }
@@ -40,28 +49,63 @@ export default function SignupForm() {
     setStep(n);
   }
 
+  function handleChange(raw: string) {
+    if (!raw.startsWith('@')) return setHd(`@${raw}`);
+    setHd(raw);
+  }
+
+  function sanitizeFollowers(raw: string) {
+    const cleaned = raw.replace(/[^0-9kKmM]/g, '');
+    const match = cleaned.match(/^(\d*)([kKmM]?)/);
+    if (!match) return '';
+    const [, digits, suffix] = match;
+    return digits + suffix.toUpperCase();
+  }
+
   function toggleNiche(n: string) {
     setSelectedNiches((prev) => (prev.includes(n) ? prev.filter((x) => x !== n) : [...prev, n]));
   }
 
-  function submitForm() {
+  async function submitForm() {
     if (!selectedNiches.length) {
       setErrors((prev) => ({ ...prev, e3: true }));
       return;
     }
-    setDoneMsg(
-      `Thanks ${fn.trim().split(' ')[0]} — we'll review your ${selectedNiches
-        .slice(0, 3)
-        .join(', ')} profile and email you within 48 hours.`,
-    );
-    setStep(4);
+
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      await applyCreator({
+        fullName: fn.trim(),
+        email: em.trim(),
+        city: ct.trim(),
+        password: pw,
+        platform: platform.toUpperCase(),
+        handle: hd.trim(),
+        followerCount: followers,
+        niches: selectedNiches,
+      });
+
+      setDoneMsg(
+        `Thanks ${fn.trim().split(' ')[0]} — we'll review your ${selectedNiches
+          .slice(0, 3)
+          .join(', ')} profile and email you within 48 hours.`,
+      );
+      setStep(4);
+    } catch {
+      setSubmitError("Couldn't submit your application. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function resetForm() {
     setFn('');
     setCt('');
     setEm('');
-    setHd('');
+    setPw('');
+    setHd('@');
+    setFollowers('');
     setSelectedNiches([]);
     setErrors(noErrors);
     setStep(1);
@@ -94,13 +138,30 @@ export default function SignupForm() {
             <input id="fn" placeholder="Ananya Rao" value={fn} onChange={(e) => setFn(e.target.value)} />
           </div>
           <div>
-            <label htmlFor="ct">City</label>
-            <input id="ct" placeholder="Bengaluru" value={ct} onChange={(e) => setCt(e.target.value)} />
+            <label htmlFor="em">Email</label>
+            <input
+              id="em"
+              type="email"
+              placeholder="you@email.com"
+              value={em}
+              onChange={(e) => setEm(e.target.value)}
+            />
           </div>
         </div>
-        <div className={`err ${errors.e1 ? 'on' : ''}`}>Fill in your name, city and email to continue.</div>
-        <label htmlFor="em">Email</label>
-        <input id="em" type="email" placeholder="you@email.com" value={em} onChange={(e) => setEm(e.target.value)} />
+        <label htmlFor="pw">Password</label>
+        <input
+          id="pw"
+          type="password"
+          placeholder="••••••••"
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
+        />
+        <div className="hint">
+          Min 8 characters, with uppercase, lowercase, a number and a special character.
+        </div>
+        <div className={`err ${errors.e1 ? 'on' : ''}`}>
+          Fill in your name, email and a strong password to continue.
+        </div>
         <div className="frow">
           <button className="btn btn-ink" onClick={() => go(2)}>
             Continue
@@ -126,18 +187,27 @@ export default function SignupForm() {
           </div>
           <div>
             <label htmlFor="hd">Handle</label>
-            <input id="hd" placeholder="@yourhandle" value={hd} onChange={(e) => setHd(e.target.value)} />
+            <input id="hd" placeholder="@yourhandle" value={hd} onChange={(e) => handleChange(e.target.value)} />
           </div>
         </div>
-        <label htmlFor="fl">Follower count</label>
-        <select id="fl" value={followers} onChange={(e) => setFollowers(e.target.value)}>
-          <option>1K – 10K (Nano)</option>
-          <option>10K – 100K (Micro)</option>
-          <option>100K – 500K (Mid)</option>
-          <option>500K – 1M (Macro)</option>
-          <option>1M+ (Mega)</option>
-        </select>
-        <div className={`err ${errors.e2 ? 'on' : ''}`}>Add your handle to continue.</div>
+        <div className="two">
+          <div>
+            <label htmlFor="ct">City</label>
+            <input id="ct" placeholder="Bengaluru" value={ct} onChange={(e) => setCt(e.target.value)} />
+          </div>
+          <div>
+            <label htmlFor="fl">Follower count</label>
+            <input
+              id="fl"
+              placeholder="e.g. 10K, 500K, 1M"
+              value={followers}
+              onChange={(e) => setFollowers(sanitizeFollowers(e.target.value))}
+            />
+          </div>
+        </div>
+        <div className={`err ${errors.e2 ? 'on' : ''}`}>
+          Add your handle, city and follower count (numbers, optionally ending in K or M) to continue.
+        </div>
         <div className="frow">
           <button className="btn btn-ghost" onClick={() => go(1)}>
             Back
@@ -165,12 +235,13 @@ export default function SignupForm() {
           ))}
         </div>
         <div className={`err ${errors.e3 ? 'on' : ''}`}>Pick at least one niche.</div>
+        <div className={`err ${submitError ? 'on' : ''}`}>{submitError}</div>
         <div className="frow">
-          <button className="btn btn-ghost" onClick={() => go(2)}>
+          <button className="btn btn-ghost" onClick={() => go(2)} disabled={submitting}>
             Back
           </button>
-          <button className="btn btn-ink" onClick={submitForm}>
-            Submit application
+          <button className="btn btn-ink" onClick={submitForm} disabled={submitting}>
+            {submitting ? 'Submitting…' : 'Submit application'}
           </button>
         </div>
       </div>

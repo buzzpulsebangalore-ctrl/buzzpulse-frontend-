@@ -22,7 +22,7 @@ function Perk({ perk, index }: { perk: Perk; index: number }) {
   return (
     <div ref={ref} className="perk reveal" style={{ transitionDelay: `${(index % 4) * 0.07}s` }}>
       <div className="pi">
-        <Icon size={18} strokeWidth={2} style={{ border: 'none' }} />
+        <Icon size={16} strokeWidth={2} style={{ border: 'none' }} />
       </div>
       <div>
         <b>{perk.title}</b>

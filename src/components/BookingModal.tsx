@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react';
 import { X, Check } from 'lucide-react';
-import type { Creator } from '../data';
+import type { PublicCreator } from '../api/creators';
+import { createBooking } from '../api/bookings';
+import { getCookie } from '../utils/cookies';
+import { formatFollowers } from '../utils/format';
 
 interface Props {
-  creator: Creator;
+  creator: PublicCreator;
   onClose: () => void;
 }
 
 export default function BookingModal({ creator, onClose }: Props) {
+  const loggedIn = !!getCookie('access_token');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('+');
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -30,14 +35,27 @@ export default function BookingModal({ creator, onClose }: Props) {
     };
   }, [onClose]);
 
-  function submit() {
-    const ok = name.trim() && phone.replace(/\D/g, '').length >= 7 && email.includes('@');
+  async function submit() {
+    const phoneValid = phone.replace(/\D/g, '').length >= 7;
+    const ok = loggedIn ? phoneValid : Boolean(name.trim()) && phoneValid && email.includes('@');
     if (!ok) {
       setError(true);
       return;
     }
     setError(false);
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      await createBooking(
+        loggedIn
+          ? { creatorId: creator.id, phone }
+          : { creatorId: creator.id, phone, fullName: name.trim(), email: email.trim() }
+      );
+    } catch (err) {
+      console.error('Failed to create booking:', err);
+    } finally {
+      setSubmitting(false);
+      setSubmitted(true);
+    }
   }
 
   return (
@@ -50,13 +68,18 @@ export default function BookingModal({ creator, onClose }: Props) {
         {!submitted ? (
           <>
             <span className="tag t-violet">Book a creator</span>
-            <h3>{creator.name}</h3>
+            <h3>{creator.fullName}</h3>
             <p className="modal-hint">
-              {creator.handle} &middot; {creator.niche} &middot; {creator.followers} followers
+              {creator.handle} &middot; {creator.niches[0] ?? 'Creator'} &middot; {formatFollowers(creator.followerCount)}{' '}
+              followers
             </p>
 
-            <label htmlFor="bk-name">Full name</label>
-            <input id="bk-name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
+            {!loggedIn && (
+              <>
+                <label htmlFor="bk-name">Full name</label>
+                <input id="bk-name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
+              </>
+            )}
 
             <label htmlFor="bk-phone">Phone number</label>
             <input
@@ -68,23 +91,31 @@ export default function BookingModal({ creator, onClose }: Props) {
               onChange={handlePhoneChange}
             />
 
-            <label htmlFor="bk-email">Email</label>
-            <input
-              id="bk-email"
-              type="email"
-              placeholder="you@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            {!loggedIn && (
+              <>
+                <label htmlFor="bk-email">Email</label>
+                <input
+                  id="bk-email"
+                  type="email"
+                  placeholder="you@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </>
+            )}
 
-            <div className={`err ${error ? 'on' : ''}`}>Fill in your name, phone and a valid email to continue.</div>
+            <div className={`err ${error ? 'on' : ''}`}>
+              {loggedIn
+                ? 'Enter a valid phone number to continue.'
+                : 'Fill in your name, phone and a valid email to continue.'}
+            </div>
 
             <div className="frow">
-              <button className="btn btn-ghost" onClick={onClose}>
+              <button className="btn btn-ghost" onClick={onClose} disabled={submitting}>
                 Cancel
               </button>
-              <button className="btn btn-ink" onClick={submit}>
-                Request booking
+              <button className="btn btn-ink" onClick={submit} disabled={submitting}>
+                {submitting ? 'Sending…' : 'Request booking'}
               </button>
             </div>
           </>
@@ -95,7 +126,8 @@ export default function BookingModal({ creator, onClose }: Props) {
             </div>
             <h3>Request sent</h3>
             <p>
-              We'll pass your details to {creator.name.split(' ')[0]}'s team and follow up by email within 48 hours.
+              We'll pass your details to {creator.fullName.split(' ')[0]}'s team and follow up by email within 48
+              hours.
             </p>
             <button className="btn btn-ink" onClick={onClose}>
               Done

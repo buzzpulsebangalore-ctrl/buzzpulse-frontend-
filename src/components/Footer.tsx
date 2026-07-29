@@ -70,6 +70,7 @@ export default function Footer() {
         <div className="fbot">
           <span>&#169; 2026 The Buzz Pulse. Creating Buzz. Driving Impact.</span>
           <span className="mono">www.thebuzzpulse.com</span>
+          <a href="/admin" className="mono">Admin</a>
         </div>
       </div>
     </footer>

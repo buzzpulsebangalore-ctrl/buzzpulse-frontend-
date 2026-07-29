@@ -1,17 +1,21 @@
 import { BadgeCheck } from 'lucide-react';
-import type { Creator } from '../data';
-import { nicheColorMap } from '../data';
+import type { PublicCreator } from '../api/creators';
+import { getNicheColorVar } from '../data';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { formatFollowers, getInitials } from '../utils/format';
 
 interface Props {
-  creator: Creator;
+  creator: PublicCreator;
   index: number;
-  onBook: (creator: Creator) => void;
+  onBook: (creator: PublicCreator) => void;
+  bookingDisabled?: boolean;
 }
 
-export default function CreatorCard({ creator, index, onBook }: Props) {
+export default function CreatorCard({ creator, index, onBook, bookingDisabled }: Props) {
   const ref = useScrollReveal<HTMLElement>();
-  const nicheColorVar = nicheColorMap[creator.niche];
+  const niche = creator.niches[0] ?? 'Creator';
+  const nicheColorVar = getNicheColorVar(niche);
+  const firstName = creator.fullName.split(' ')[0];
 
   return (
     <article
@@ -19,14 +23,18 @@ export default function CreatorCard({ creator, index, onBook }: Props) {
       className="ccard reveal"
       style={{ transitionDelay: `${(index % 4) * 0.07}s` }}
     >
-      <div className="cc-cover" style={{ background: `linear-gradient(120deg, var(${creator.colorVar}), var(--violet))` }} />
+      <div className="cc-cover" style={{ background: `linear-gradient(120deg, var(${nicheColorVar}), var(--violet))` }} />
       <div className="cc-top">
-        <img className="cc-av" src={`https://i.pravatar.cc/160?img=${creator.avatarId}`} alt={creator.name} />
+        {creator.avatarUrl ? (
+          <img className="cc-av" src={creator.avatarUrl} alt={creator.fullName} />
+        ) : (
+          <div className="cc-av cc-av-fallback">{getInitials(creator.fullName)}</div>
+        )}
       </div>
       <div className="cc-body">
         <div className="cc-name">
-          {creator.name}{' '}
-          <BadgeCheck size={16} className="verif" color="var(--cyan)" fill="var(--ink)" style={{ border: 'none' }} />
+          {creator.fullName}{' '}
+          <BadgeCheck size={16} className="verif" color="#fff" fill="var(--cyan)" style={{ border: 'none' }} />
         </div>
         <div className="cc-handle">{creator.handle}</div>
         <span
@@ -36,24 +44,24 @@ export default function CreatorCard({ creator, index, onBook }: Props) {
             color: `var(${nicheColorVar})`,
           }}
         >
-          {creator.niche}
+          {niche}
         </span>
         <div className="cc-nums">
           <div>
-            <b>{creator.followers}</b>
+            <b>{formatFollowers(creator.followerCount)}</b>
             <span>Followers</span>
           </div>
           <div>
-            <b>{creator.engagement}</b>
+            <b>{Number(creator.engagementRate.toFixed(1))}%</b>
             <span>Engage</span>
           </div>
           <div>
-            <b>{creator.campaigns}</b>
+            <b>{creator.campaignsCount}</b>
             <span>Campaigns</span>
           </div>
         </div>
-        <button className="cc-btn" onClick={() => onBook(creator)}>
-          Book {creator.name.split(' ')[0]}
+        <button className="cc-btn" onClick={() => onBook(creator)} disabled={bookingDisabled}>
+          Book {firstName}
         </button>
       </div>
     </article>
