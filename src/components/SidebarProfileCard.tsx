@@ -1,33 +1,31 @@
 import { useEffect, useState } from 'react';
 import { User } from 'lucide-react';
 import { getCookie } from '../utils/cookies';
-import { getMyProfile } from '../api/creators';
+import { getMyProfile, type CreatorProfileResponse } from '../api/creators';
 import { getInitials } from '../utils/format';
 
 export default function SidebarProfileCard() {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [profile, setProfile] = useState<CreatorProfileResponse | null>(null);
   const role = getCookie('role');
-  const fullName = getCookie('fullName');
-  const email = getCookie('email');
 
   useEffect(() => {
-    if (role !== 'ADMIN') {
-      getMyProfile()
-        .then((profile) => setAvatarUrl(profile.avatarUrl))
-        .catch(() => {});
-    }
-  }, [role]);
+    getMyProfile()
+      .then(setProfile)
+      .catch(() => {});
+  }, []);
+
+  const displayName = profile?.fullName || profile?.email;
 
   return (
     <div className="sidebar-profile-card">
-      {fullName && email ? (
+      {profile && displayName ? (
         <>
           <span className="sidebar-profile-avatar">
-            {avatarUrl ? <img src={avatarUrl} alt="" /> : getInitials(fullName)}
+            {profile.avatarUrl ? <img src={profile.avatarUrl} alt="" /> : getInitials(displayName)}
           </span>
           <span className="sidebar-profile-info">
-            <span className="sidebar-profile-name">{fullName}</span>
-            <span className="sidebar-profile-email">{email}</span>
+            <span className="sidebar-profile-name">{displayName}</span>
+            <span className="sidebar-profile-email">{profile.email}</span>
           </span>
         </>
       ) : (

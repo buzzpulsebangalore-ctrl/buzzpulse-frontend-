@@ -20,8 +20,6 @@ export default function AccountMenu() {
   function logout() {
     deleteCookie('access_token');
     deleteCookie('role');
-    deleteCookie('fullName');
-    deleteCookie('email');
     window.location.assign('/');
   }
 
