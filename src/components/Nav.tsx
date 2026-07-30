@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { WRAP } from '../styles';
 import LoginModal from './LoginModal';
@@ -23,10 +23,42 @@ const navLinks = [
 export default function Nav() {
   const [showLogin, setShowLogin] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   const loggedIn = !!getCookie('access_token');
 
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
+    function onScroll() {
+      const currentY = window.scrollY;
+      const scrollingDown = currentY > lastScrollY.current;
+      setHidden(scrollingDown && currentY > 80);
+      lastScrollY.current = currentY;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (menuOpen) setHidden(false);
+  }, [menuOpen]);
+
+  function handleBecomeCreator() {
+    setMenuOpen(false);
+    if (loggedIn) goToDashboard();
+    else scrollTo('join');
+  }
+
+  function handleLoginOrDashboard() {
+    setMenuOpen(false);
+    if (loggedIn) goToDashboard();
+    else setShowLogin(true);
+  }
+
   return (
-    <nav>
+    <nav className={hidden ? 'nav-hidden' : ''}>
       <div className={`${WRAP} nav-in`}>
         <div className="logo">
           <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
@@ -39,10 +71,10 @@ export default function Nav() {
           ))}
         </div>
         <div className="nav-actions">
-          <button className="btn" onClick={() => (loggedIn ? goToDashboard() : scrollTo('join'))}>
+          <button className="btn" onClick={handleBecomeCreator}>
             Become a Creator
           </button>
-          <button className="btn" onClick={() => (loggedIn ? goToDashboard() : setShowLogin(true))}>
+          <button className="btn" onClick={handleLoginOrDashboard}>
             {loggedIn ? 'Dashboard' : 'Login'}
           </button>
         </div>
@@ -67,6 +99,14 @@ export default function Nav() {
               {l.label}
             </a>
           ))}
+          <div className="nav-mobile-actions">
+            <button className="btn btn-ghost" onClick={handleBecomeCreator}>
+              Become a Creator
+            </button>
+            <button className="btn btn-ink" onClick={handleLoginOrDashboard}>
+              {loggedIn ? 'Dashboard' : 'Login'}
+            </button>
+          </div>
         </div>
       )}
 

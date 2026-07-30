@@ -54,14 +54,10 @@ export default function Creators() {
   const placeholderIds = useMemo(() => new Set(placeholderCreators.map((p) => p.id)), []);
 
   const display = useMemo(() => {
-    if (filtered.length >= PAGE_SIZE) return filtered;
-    const usedIds = new Set(filtered.map((c) => c.id));
-    const pool = placeholderCreators.filter((p) => !usedIds.has(p.id));
-    const preferred = active === 'All' ? pool : pool.filter((p) => p.niches.includes(active));
-    const rest = pool.filter((p) => !preferred.includes(p));
-    const fillers = [...preferred, ...rest].slice(0, PAGE_SIZE - filtered.length);
-    return [...filtered, ...fillers];
-  }, [filtered, active]);
+    if (!loading) return filtered;
+    const pool = active === 'All' ? placeholderCreators : placeholderCreators.filter((p) => p.niches.includes(active));
+    return pool.slice(0, PAGE_SIZE);
+  }, [filtered, active, loading]);
 
   return (
     <section id="creators" className={SECTION_PAD}>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   X,
+  Menu,
   Search,
   LayoutDashboard,
   Users,
@@ -150,6 +151,7 @@ function DetailModal({
 
 export default function AdminDashboard() {
   const [view, setView] = useState<View>('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [creators, setCreators] = useState<CreatorProfileResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -303,19 +305,41 @@ export default function AdminDashboard() {
     <div className="admin">
       <div className="admin-topbar">
         <div className="admin-topbar-in admin-topbar-full">
-          <div className="logo">
-            <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
+          <div className="admin-topbar-left">
+            <button
+              type="button"
+              className="admin-menu-btn"
+              aria-label="Open menu"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu size={22} strokeWidth={2} style={{ border: 'none' }} />
+            </button>
+            <div className="logo">
+              <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
+            </div>
           </div>
           <AccountMenu />
         </div>
       </div>
 
       <div className="admin-shell">
-        <aside className="admin-sidebar">
+        {sidebarOpen && <div className="admin-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
+        <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
+          <button
+            type="button"
+            className="admin-sidebar-close"
+            aria-label="Close menu"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X size={20} strokeWidth={2} style={{ border: 'none' }} />
+          </button>
           <button
             type="button"
             className={`admin-nav-item ${view === 'overview' ? 'on' : ''}`}
-            onClick={() => setView('overview')}
+            onClick={() => {
+              setView('overview');
+              setSidebarOpen(false);
+            }}
           >
             <LayoutDashboard size={17} strokeWidth={2} style={{ border: 'none' }} />
             Overview
@@ -323,7 +347,10 @@ export default function AdminDashboard() {
           <button
             type="button"
             className={`admin-nav-item ${view === 'users' ? 'on' : ''}`}
-            onClick={() => setView('users')}
+            onClick={() => {
+              setView('users');
+              setSidebarOpen(false);
+            }}
           >
             <Users size={17} strokeWidth={2} style={{ border: 'none' }} />
             Creator list
@@ -331,7 +358,10 @@ export default function AdminDashboard() {
           <button
             type="button"
             className={`admin-nav-item ${view === 'bookings' ? 'on' : ''}`}
-            onClick={() => setView('bookings')}
+            onClick={() => {
+              setView('bookings');
+              setSidebarOpen(false);
+            }}
           >
             <CalendarCheck size={17} strokeWidth={2} style={{ border: 'none' }} />
             Booking requests
