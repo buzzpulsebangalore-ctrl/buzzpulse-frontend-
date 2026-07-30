@@ -283,7 +283,8 @@ footer{background:var(--ink);color:#fff;padding:70px 0 30px}
 @media(max-width:800px){
   .admin-topbar-full{padding:0 16px}
   .admin-shell{flex-direction:column;min-height:0}
-  .admin-sidebar{width:100%;flex-direction:row;position:static;height:auto;overflow-x:auto;border-right:0;border-bottom:1px solid #ECECF1;padding:12px 16px}
+  .admin-sidebar{width:100%;flex:0 0 auto;min-width:0;max-width:none;flex-direction:row;align-items:center;position:static;height:auto;overflow-x:auto;border-right:0;border-bottom:1px solid #ECECF1;padding:12px 16px}
+  .admin-nav-item{width:auto;flex:none;white-space:nowrap}
   .admin-main{padding:24px 16px 60px}
   .sidebar-profile-card{margin-top:0;margin-left:auto;padding-top:0;padding-left:12px;border-top:0;border-left:1px solid #ECECF1;flex:none}
 }

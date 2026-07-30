@@ -27,7 +27,7 @@ import {
   type BookingStatus,
 } from '../api/bookings';
 import { getAdminDashboard, type AdminDashboardResponse } from '../api/dashboard';
-import { getCookie } from '../utils/cookies';
+import { deleteCookie, getCookie } from '../utils/cookies';
 import { toast } from './Toast';
 import AccountMenu from './AccountMenu';
 import SidebarProfileCard from './SidebarProfileCard';
@@ -40,6 +40,12 @@ type BookingStatusFilter = 'All' | BookingStatus;
 
 const statusFilters: StatusFilter[] = ['All', 'PENDING', 'APPROVED', 'REJECTED'];
 const bookingStatusFilters: BookingStatusFilter[] = ['All', 'PENDING', 'ACCEPTED', 'DECLINED', 'CANCELLED'];
+
+function redirectToLogin() {
+  deleteCookie('access_token');
+  deleteCookie('role');
+  window.location.assign('/');
+}
 
 function StatusBadge({ status }: { status: string }) {
   const s = status.toUpperCase();
@@ -167,7 +173,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!getCookie('access_token')) {
-      window.location.assign('/');
+      redirectToLogin();
       return;
     }
     loadCreators();
@@ -182,7 +188,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load admin dashboard:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          window.location.assign('/');
+          redirectToLogin();
           return;
         }
         setDashboardError("Couldn't load dashboard stats. Please try again.");
@@ -204,7 +210,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load creators:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          window.location.assign('/');
+          redirectToLogin();
           return;
         }
         setLoadError("Couldn't load creators. Please try again.");
@@ -223,7 +229,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load booking requests:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          window.location.assign('/');
+          redirectToLogin();
           return;
         }
         setBookingsError("Couldn't load booking requests. Please try again.");

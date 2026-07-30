@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Camera, X, Mail, MapPin, CalendarDays } from 'lucide-react';
 import { getMyProfile, updateMyProfile, updateMyAvatar, type CreatorProfileResponse } from '../api/creators';
-import { getCookie } from '../utils/cookies';
+import { deleteCookie, getCookie } from '../utils/cookies';
 import { signupNiches } from '../data';
 import { toast } from './Toast';
 import AccountMenu from './AccountMenu';
 import { formatFollowers, getInitials } from '../utils/format';
 
 const platforms = ['INSTAGRAM', 'YOUTUBE', 'TIKTOK', 'TWITTER', 'FACEBOOK'];
+
+function redirectToLogin() {
+  deleteCookie('access_token');
+  deleteCookie('role');
+  window.location.assign('/');
+}
 
 interface FormState {
   fullName: string;
@@ -118,7 +124,7 @@ export default function CreatorDashboard() {
 
   useEffect(() => {
     if (!getCookie('access_token')) {
-      window.location.assign('/');
+      redirectToLogin();
       return;
     }
 
@@ -127,7 +133,7 @@ export default function CreatorDashboard() {
       .catch((err) => {
         console.error('Failed to load profile:', err);
         if (String(err.message).includes('401')) {
-          window.location.assign('/');
+          redirectToLogin();
           return;
         }
         setLoadError("Couldn't load your profile. Please try again.");
