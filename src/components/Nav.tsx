@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { WRAP } from '../styles';
 import LoginModal from './LoginModal';
 import { getCookie } from '../utils/cookies';
@@ -13,8 +13,16 @@ function goToDashboard() {
   window.location.assign(role === 'ADMIN' ? '/admin' : '/creator');
 }
 
+const navLinks = [
+  { id: 'creators', label: 'Creators' },
+  { id: 'services', label: 'Services' },
+  { id: 'process', label: 'Process' },
+  { id: 'join', label: 'Join' },
+];
+
 export default function Nav() {
   const [showLogin, setShowLogin] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const loggedIn = !!getCookie('access_token');
 
   return (
@@ -24,10 +32,11 @@ export default function Nav() {
           <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
         </div>
         <div className="nav-links">
-          <a href="#creators">Creators</a>
-          <a href="#services">Services</a>
-          <a href="#process">Process</a>
-          <a href="#join">Join</a>
+          {navLinks.map((l) => (
+            <a key={l.id} href={`#${l.id}`}>
+              {l.label}
+            </a>
+          ))}
         </div>
         <div className="nav-actions">
           <button className="btn" onClick={() => (loggedIn ? goToDashboard() : scrollTo('join'))}>
@@ -37,10 +46,29 @@ export default function Nav() {
             {loggedIn ? 'Dashboard' : 'Login'}
           </button>
         </div>
-        <button className="menu-btn" aria-label="Menu">
-          <Menu size={24} strokeWidth={2} style={{ border: 'none' }} />
+        <button
+          className="menu-btn"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          {menuOpen ? (
+            <X size={24} strokeWidth={2} style={{ border: 'none' }} />
+          ) : (
+            <Menu size={24} strokeWidth={2} style={{ border: 'none' }} />
+          )}
         </button>
       </div>
+
+      {menuOpen && (
+        <div className={`${WRAP} nav-mobile`}>
+          {navLinks.map((l) => (
+            <a key={l.id} href={`#${l.id}`} onClick={() => setMenuOpen(false)}>
+              {l.label}
+            </a>
+          ))}
+        </div>
+      )}
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </nav>

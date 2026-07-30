@@ -51,6 +51,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.86);backdrop-
 .nav-links a{position:relative;padding:4px 0}
 .nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--grad);transition:width .28s;border-radius:3px}
 .nav-links a:hover::after{width:100%}
+.nav-mobile{display:none}
 .btn{border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;padding:9px 22px;border-radius:999px;transition:transform .18s, box-shadow .18s}
 .btn:hover{transform:translateY(-2px)}
 .btn-ink{background:var(--ink);color:#fff}
@@ -451,12 +452,22 @@ footer{background:var(--ink);color:#fff;padding:70px 0 30px}
 @media(max-width:860px){
   .nav-links{display:none}
   .menu-btn{display:block}
+  .nav-mobile{display:flex;flex-direction:column;padding-top:8px;padding-bottom:18px;border-top:1px solid rgba(10,10,15,.08);background:rgba(255,255,255,.98);animation:fade .25s ease}
+  .nav-mobile a{padding:13px 2px;font-size:15px;font-weight:700;border-bottom:1px solid rgba(10,10,15,.06)}
+  .nav-mobile a:last-child{border-bottom:0}
   .hero-grid,.su-grid{grid-template-columns:1fr}
   .phone-wrap{margin-top:40px}
 }
 @media(max-width:600px){
   .cgrid,.svc-grid,.proc,.fgrid,.two{grid-template-columns:1fr}
   .float-card{display:none}
+  .creator-pager{flex-wrap:wrap;row-gap:10px}
+  .modal-card{padding:26px 20px}
+}
+@media(max-width:480px){
+  .nav-in{height:64px}
+  .logo-full{height:30px}
+  .nav-actions .btn{padding:8px 11px;font-size:10.5px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
