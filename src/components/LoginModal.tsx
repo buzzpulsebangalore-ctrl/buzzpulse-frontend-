@@ -37,12 +37,16 @@ export default function LoginModal({ onClose }: Props) {
     setSubmitting(true);
     try {
       const res = await login({ email: email.trim(), password });
+      if (res.user.role === 'ADMIN') {
+        toast('Login failed. Check your email and password.', 'error');
+        return;
+      }
       setCookie('access_token', res.access_token);
       setCookie('role', res.user.role);
       const displayName = res.user.fullName?.trim().split(' ')[0] || res.user.email;
       toast(`Welcome back, ${displayName}!`, 'success');
       onClose();
-      window.location.assign(res.user.role === 'ADMIN' ? '/admin' : '/creator');
+      window.location.assign('/creator');
     } catch (err) {
       console.error('Login failed:', err);
       toast('Login failed. Check your email and password.', 'error');

@@ -1,35 +1,74 @@
-import { Megaphone, Map, Landmark, PartyPopper, TrendingUp, Clapperboard, type LucideIcon } from 'lucide-react';
+import { Handshake, Clapperboard, Bot, Share2, TrendingUp, Repeat, type LucideIcon } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { WRAP, SECTION_PAD } from '../styles';
 
-interface Service {
+interface Solution {
   icon: LucideIcon;
   title: string;
   desc: string;
-  cls: string;
+  gradient: string;
 }
 
-const services: Service[] = [
-  { icon: Megaphone, title: 'Influencer Marketing', desc: 'Partner with verified creators across every category to amplify your campaign and reach highly engaged audiences.', cls: 's1' },
-  { icon: Map, title: 'Destination & Tourism', desc: 'Help states, tourism boards, hotels and heritage sites attract travellers through immersive digital campaigns.', cls: 's2' },
-  { icon: Landmark, title: 'Government Campaigns', desc: 'Public awareness initiatives and flagship national programmes that educate, engage and inspire citizens.', cls: 's3' },
-  { icon: PartyPopper, title: 'Event Management', desc: 'Festivals, product launches, exhibitions, conferences, college fests and destination activations.', cls: 's4' },
-  { icon: TrendingUp, title: 'Digital Marketing', desc: 'Performance marketing, content strategy, social media management and online reputation management.', cls: 's5' },
-  { icon: Clapperboard, title: 'Video Production', desc: 'Documentaries, tourism films, corporate videos, aerial cinematography and promotional campaigns.', cls: 's6' },
+const solutions: Solution[] = [
+  {
+    icon: Handshake,
+    title: 'Influencer Collaboration',
+    desc: 'Partner with Nano, Micro and Macro creators who authentically connect with your audience — selected for values alignment, genuine engagement and impactful storytelling.',
+    gradient: 'from-(--hot) to-(--violet)',
+  },
+  {
+    icon: Clapperboard,
+    title: 'UGC Content Creation',
+    desc: 'High-quality, authentic user-generated video that reflects your brand — built to drive engagement and improve ROAS on your performance campaigns.',
+    gradient: 'from-(--violet) to-(--cyan)',
+  },
+  {
+    icon: Bot,
+    title: 'AI-Generated Influencer Content',
+    desc: 'Promote your products with high-performing videos featuring AI avatars, built to your brand’s requirements. Perfect for social media and audience education.',
+    gradient: 'from-(--cyan) to-(--ink)',
+  },
+  {
+    icon: Share2,
+    title: 'Social Media Management',
+    desc: 'Content creation, posting and scheduling, community engagement, and monitoring of both your brand and your competitors — handled end to end.',
+    gradient: 'from-(--amber) to-(--hot)',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Performance Marketing',
+    desc: 'Performance-based campaigns targeted at specific business goals, engineered for consistent results, sales growth and a better cost-per-result.',
+    gradient: 'from-(--violet) to-(--ink)',
+  },
+  {
+    icon: Repeat,
+    title: 'Barter Collaboration',
+    desc: 'Big impact without the big budget — Nano and Micro creators promote your products in exchange for free offerings, maximising results while keeping costs low.',
+    gradient: 'from-(--hot) to-(--amber)',
+  },
 ];
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function SolutionCard({ solution, index }: { solution: Solution; index: number }) {
   const ref = useScrollReveal<HTMLDivElement>();
-  const Icon = service.icon;
+  const Icon = solution.icon;
   return (
-    <div ref={ref} className={`svc ${service.cls} reveal`} style={{ transitionDelay: `${(index % 4) * 0.07}s` }}>
-      <div className="ico">
-        <Icon size={34} strokeWidth={1.8} style={{ border: 'none' }} />
+    <div
+      ref={ref}
+      className="reveal group relative overflow-hidden rounded-[20px] border border-black/5 bg-white p-7 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.28)]"
+      style={{ transitionDelay: `${(index % 4) * 0.07}s` }}
+    >
+      <div className={`mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-linear-to-br ${solution.gradient} text-white`}>
+        <Icon size={24} strokeWidth={1.8} style={{ border: 'none' }} />
       </div>
-      <div>
-        <h3>{service.title}</h3>
-        <p>{service.desc}</p>
-      </div>
+      <h3 className="mb-2.5 text-[19px] font-bold tracking-tight">{solution.title}</h3>
+      <p className="text-sm leading-relaxed text-[#54506E]">{solution.desc}</p>
+      <button
+        type="button"
+        onClick={() => window.location.assign('/join/creator')}
+        className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-(--violet) transition-all group-hover:gap-2.5"
+      >
+        Learn more →
+      </button>
     </div>
   );
 }
@@ -46,9 +85,9 @@ export default function Services() {
             end.
           </p>
         </div>
-        <div className="svc-grid">
-          {services.map((s, i) => (
-            <ServiceCard key={s.title} service={s} index={i} />
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {solutions.map((s, i) => (
+            <SolutionCard key={s.title} solution={s} index={i} />
           ))}
         </div>
       </div>

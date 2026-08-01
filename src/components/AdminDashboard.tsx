@@ -12,6 +12,7 @@ import {
   MapPin,
   CalendarDays,
   CalendarCheck,
+  Briefcase,
   Phone,
   Loader2,
 } from 'lucide-react';
@@ -27,6 +28,12 @@ import {
   type BookingListItem,
   type BookingStatus,
 } from '../api/bookings';
+import {
+  listBrands,
+  updateBrandStatus,
+  type BrandResponse,
+  type BrandStatus,
+} from '../api/brands';
 import { getAdminDashboard, type AdminDashboardResponse } from '../api/dashboard';
 import { deleteCookie, getCookie } from '../utils/cookies';
 import { toast } from './Toast';
@@ -35,12 +42,14 @@ import SidebarProfileCard from './SidebarProfileCard';
 import WeeklyTrendChart from './WeeklyTrendChart';
 import { getInitials, formatFollowers } from '../utils/format';
 
-type View = 'overview' | 'users' | 'bookings';
+type View = 'overview' | 'users' | 'bookings' | 'brands';
 type StatusFilter = 'All' | CreatorStatus;
 type BookingStatusFilter = 'All' | BookingStatus;
+type BrandStatusFilter = 'All' | BrandStatus;
 
 const statusFilters: StatusFilter[] = ['All', 'PENDING', 'APPROVED', 'REJECTED'];
 const bookingStatusFilters: BookingStatusFilter[] = ['All', 'PENDING', 'ACCEPTED', 'DECLINED', 'CANCELLED'];
+const brandStatusFilters: BrandStatusFilter[] = ['All', 'PENDING', 'APPROVED', 'REJECTED'];
 
 function redirectToLogin() {
   deleteCookie('access_token');
@@ -169,6 +178,15 @@ export default function AdminDashboard() {
   const [updatingBookingId, setUpdatingBookingId] = useState<string | null>(null);
   const [updatingBookingAction, setUpdatingBookingAction] = useState<BookingStatus | null>(null);
 
+  const [brands, setBrands] = useState<BrandResponse[]>([]);
+  const [brandsLoading, setBrandsLoading] = useState(true);
+  const [brandsLoaded, setBrandsLoaded] = useState(false);
+  const [brandsError, setBrandsError] = useState('');
+  const [brandQuery, setBrandQuery] = useState('');
+  const [brandStatus, setBrandStatus] = useState<BrandStatusFilter>('All');
+  const [updatingBrandId, setUpdatingBrandId] = useState<string | null>(null);
+  const [updatingBrandAction, setUpdatingBrandAction] = useState<BrandStatus | null>(null);
+
   const [dashboard, setDashboard] = useState<AdminDashboardResponse | null>(null);
   const [dashboardLoading, setDashboardLoading] = useState(true);
   const [dashboardError, setDashboardError] = useState('');
@@ -204,6 +222,12 @@ export default function AdminDashboard() {
     }
   }, [view, bookingsLoaded]);
 
+  useEffect(() => {
+    if (view === 'brands' && !brandsLoaded) {
+      loadBrands();
+    }
+  }, [view, brandsLoaded]);
+
   function loadCreators() {
     setLoading(true);
     setLoadError('');
@@ -237,6 +261,55 @@ export default function AdminDashboard() {
         setBookingsError("Couldn't load booking requests. Please try again.");
       })
       .finally(() => setBookingsLoading(false));
+  }
+
+  function loadBrands() {
+    setBrandsLoading(true);
+    setBrandsError('');
+    listBrands()
+      .then((res) => {
+        setBrands(res);
+        setBrandsLoaded(true);
+      })
+      .catch((err) => {
+        console.error('Failed to load brand requests:', err);
+        if (String(err.message).includes('401') || String(err.message).includes('403')) {
+          redirectToLogin();
+          return;
+        }
+        setBrandsError("Couldn't load brand requests. Please try again.");
+      })
+      .finally(() => setBrandsLoading(false));
+  }
+
+  const filteredBrands = useMemo(() => {
+    return brands.filter((b) => {
+      const matchesStatus = brandStatus === 'All' || b.status === brandStatus;
+      const q = brandQuery.trim().toLowerCase();
+      const matchesQuery =
+        !q ||
+        b.brandName.toLowerCase().includes(q) ||
+        b.companyName.toLowerCase().includes(q) ||
+        b.contactName.toLowerCase().includes(q) ||
+        b.email.toLowerCase().includes(q);
+      return matchesStatus && matchesQuery;
+    });
+  }, [brands, brandQuery, brandStatus]);
+
+  async function handleSetBrandStatus(id: string, next: BrandStatus) {
+    setUpdatingBrandId(id);
+    setUpdatingBrandAction(next);
+    try {
+      const updated = await updateBrandStatus(id, next);
+      setBrands((prev) => prev.map((b) => (b.id === id ? updated : b)));
+      toast(`Brand marked as ${next.toLowerCase()}`, 'success');
+    } catch (err) {
+      console.error('Failed to update brand status:', err);
+      toast("Couldn't update brand. Please try again.", 'error');
+    } finally {
+      setUpdatingBrandId(null);
+      setUpdatingBrandAction(null);
+    }
   }
 
   const filteredBookings = useMemo(() => {
@@ -366,12 +439,23 @@ export default function AdminDashboard() {
             <CalendarCheck size={17} strokeWidth={2} style={{ border: 'none' }} />
             Booking requests
           </button>
+          <button
+            type="button"
+            className={`admin-nav-item ${view === 'brands' ? 'on' : ''}`}
+            onClick={() => {
+              setView('brands');
+              setSidebarOpen(false);
+            }}
+          >
+            <Briefcase size={17} strokeWidth={2} style={{ border: 'none' }} />
+            Brand requests
+          </button>
 
           <SidebarProfileCard />
         </aside>
 
         <div className="admin-main">
-          {view !== 'bookings' && !loading && loadError && <p className="admin-sub">{loadError}</p>}
+          {view !== 'bookings' && view !== 'brands' && !loading && loadError && <p className="admin-sub">{loadError}</p>}
 
           {view === 'overview' && (
             <>
@@ -689,6 +773,140 @@ export default function AdminDashboard() {
                           <tr>
                             <td colSpan={6} className="admin-empty">
                               No booking requests match your filters.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+
+          {view === 'brands' && (
+            <>
+              <h1 className="admin-title">Brand requests</h1>
+              <p className="admin-sub">Review and manage brand partnership applications.</p>
+
+              {!brandsLoading && brandsError && <p className="admin-sub">{brandsError}</p>}
+
+              {!brandsError && (
+                <>
+                  {!brandsLoading && (
+                    <div className="admin-controls">
+                      <div className="admin-search">
+                        <Search size={16} strokeWidth={2} style={{ border: 'none' }} />
+                        <input
+                          placeholder="Search brand, company or email…"
+                          value={brandQuery}
+                          onChange={(e) => setBrandQuery(e.target.value)}
+                        />
+                      </div>
+                      <div className="filters">
+                        {brandStatusFilters.map((s) => (
+                          <button
+                            key={s}
+                            className={`chip ${brandStatus === s ? 'on' : ''}`}
+                            onClick={() => setBrandStatus(s)}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="admin-table-wrap">
+                    <table className="admin-table">
+                      <thead>
+                        <tr>
+                          <th>Brand</th>
+                          <th>Company</th>
+                          <th>Contact</th>
+                          <th>Looking for</th>
+                          <th>Status</th>
+                          <th>Requested</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {brandsLoading &&
+                          Array.from({ length: 5 }, (_, i) => (
+                            <tr key={i}>
+                              <td>
+                                <div className="admin-skel-bar w-70" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-70" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-50" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-70" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-pill" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-bar w-50" />
+                              </td>
+                              <td>
+                                <div className="admin-skel-btn" />
+                              </td>
+                            </tr>
+                          ))}
+                        {!brandsLoading && filteredBrands.map((b) => (
+                          <tr key={b.id}>
+                            <td>{b.brandName}</td>
+                            <td>{b.companyName}</td>
+                            <td>
+                              <div>{b.contactName}</div>
+                              <div className="admin-row-sub">
+                                <Mail size={12} strokeWidth={2} style={{ border: 'none' }} /> {b.email}
+                              </div>
+                              <div className="admin-row-sub">
+                                <Phone size={12} strokeWidth={2} style={{ border: 'none' }} /> {b.phone}
+                              </div>
+                            </td>
+                            <td>{b.lookingFor}</td>
+                            <td>
+                              <StatusBadge status={b.status} />
+                            </td>
+                            <td>{new Date(b.createdAt).toLocaleDateString()}</td>
+                            <td>
+                              <div className="admin-row-actions">
+                                <button
+                                  className="btn btn-ghost admin-view-btn"
+                                  onClick={() => handleSetBrandStatus(b.id, 'REJECTED')}
+                                  disabled={updatingBrandId === b.id || b.status === 'REJECTED'}
+                                >
+                                  {updatingBrandId === b.id && updatingBrandAction === 'REJECTED' ? (
+                                    <Loader2 size={14} strokeWidth={2} className="spin" style={{ border: 'none' }} />
+                                  ) : (
+                                    'Reject'
+                                  )}
+                                </button>
+                                <button
+                                  className="btn btn-ink admin-view-btn"
+                                  onClick={() => handleSetBrandStatus(b.id, 'APPROVED')}
+                                  disabled={updatingBrandId === b.id || b.status === 'APPROVED'}
+                                >
+                                  {updatingBrandId === b.id && updatingBrandAction === 'APPROVED' ? (
+                                    <Loader2 size={14} strokeWidth={2} className="spin" style={{ border: 'none' }} />
+                                  ) : (
+                                    'Approve'
+                                  )}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                        {!brandsLoading && !filteredBrands.length && (
+                          <tr>
+                            <td colSpan={7} className="admin-empty">
+                              No brand requests match your filters.
                             </td>
                           </tr>
                         )}

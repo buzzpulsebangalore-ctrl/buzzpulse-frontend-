@@ -39,6 +39,43 @@ export async function createBooking(payload: CreateBookingRequest): Promise<Book
   return res.json();
 }
 
+export interface CreateGeneralBookingRequest {
+  phone: string;
+  message: string;
+  fullName?: string;
+  email?: string;
+}
+
+export interface GeneralBookingResponse {
+  id: string;
+  bookerId: string | null;
+  fullName: string;
+  phone: string;
+  email: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function createGeneralBooking(payload: CreateGeneralBookingRequest): Promise<GeneralBookingResponse> {
+  const token = getCookie('access_token');
+  const res = await fetch(`${API_BASE_URL}/bookings/general`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Create general booking failed with status ${res.status}${body ? `: ${body}` : ''}`);
+  }
+
+  return res.json();
+}
+
 export type BookingStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'CANCELLED';
 
 export interface BookingCreatorSummary {
