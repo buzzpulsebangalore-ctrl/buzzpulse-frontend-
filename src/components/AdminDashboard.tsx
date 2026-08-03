@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, type NavigateFunction } from 'react-router-dom';
 import {
   X,
   Menu,
@@ -51,10 +52,10 @@ const statusFilters: StatusFilter[] = ['All', 'PENDING', 'APPROVED', 'REJECTED']
 const bookingStatusFilters: BookingStatusFilter[] = ['All', 'PENDING', 'ACCEPTED', 'DECLINED', 'CANCELLED'];
 const brandStatusFilters: BrandStatusFilter[] = ['All', 'PENDING', 'APPROVED', 'REJECTED'];
 
-function redirectToLogin() {
+function redirectToLogin(navigate: NavigateFunction) {
   deleteCookie('access_token');
   deleteCookie('role');
-  window.location.assign('/');
+  navigate('/');
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -159,6 +160,7 @@ function DetailModal({
 }
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [view, setView] = useState<View>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [creators, setCreators] = useState<CreatorProfileResponse[]>([]);
@@ -193,7 +195,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!getCookie('access_token')) {
-      redirectToLogin();
+      redirectToLogin(navigate);
       return;
     }
     loadCreators();
@@ -208,7 +210,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load admin dashboard:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          redirectToLogin();
+          redirectToLogin(navigate);
           return;
         }
         setDashboardError("Couldn't load dashboard stats. Please try again.");
@@ -236,7 +238,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load creators:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          redirectToLogin();
+          redirectToLogin(navigate);
           return;
         }
         setLoadError("Couldn't load creators. Please try again.");
@@ -255,7 +257,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load booking requests:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          redirectToLogin();
+          redirectToLogin(navigate);
           return;
         }
         setBookingsError("Couldn't load booking requests. Please try again.");
@@ -274,7 +276,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Failed to load brand requests:', err);
         if (String(err.message).includes('401') || String(err.message).includes('403')) {
-          redirectToLogin();
+          redirectToLogin(navigate);
           return;
         }
         setBrandsError("Couldn't load brand requests. Please try again.");

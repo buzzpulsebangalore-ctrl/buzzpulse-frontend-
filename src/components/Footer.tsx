@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { WRAP } from '../styles';
 import GeneralInquiryModal from './GeneralInquiryModal';
@@ -184,24 +185,21 @@ export default function Footer() {
                 <a href="#process">Process</a>
               </li>
               <li>
-                <a href="/join/creator">Become a Creator</a>
+                <Link to="/join/creator">Become a Creator</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h4>Sectors</h4>
+            <h4>Solutions</h4>
             <ul>
               <li>
-                <a href="#">Government</a>
+                <a href="#services">What We Do</a>
               </li>
               <li>
-                <a href="#">Tourism Boards</a>
+                <a href="#process">Our Process</a>
               </li>
               <li>
-                <a href="#">Hospitality</a>
-              </li>
-              <li>
-                <a href="#">Startups & FMCG</a>
+                <a href="#ai-content">AI Content Showcase</a>
               </li>
             </ul>
           </div>
@@ -209,16 +207,13 @@ export default function Footer() {
             <h4>Company</h4>
             <ul>
               <li>
-                <a href="#">About</a>
+                <Link to="/about">About</Link>
               </li>
               <li>
-                <a href="#">Portfolio</a>
+                <Link to="/careers">Careers</Link>
               </li>
               <li>
-                <a href="#">Careers</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
+                <Link to="/contact">Contact</Link>
               </li>
             </ul>
           </div>

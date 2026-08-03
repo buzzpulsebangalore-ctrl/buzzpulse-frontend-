@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Check } from 'lucide-react';
 import { applyBrand } from '../api/brands';
 
@@ -53,18 +54,18 @@ export default function BrandApplyPage() {
       <div className="blob b2" style={{ opacity: 0.16 }} />
 
       <div className="auth-page-header">
-        <a href="/" className="logo">
+        <Link to="/" className="logo">
           <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
-        </a>
+        </Link>
       </div>
 
       <div className="auth-page-body">
         <div className="join-apply-wrap">
           {!done && (
-            <a href="/join" className="auth-page-back">
+            <Link to="/join" className="auth-page-back">
               <ArrowLeft size={14} strokeWidth={2} style={{ border: 'none' }} />
               Back
-            </a>
+            </Link>
           )}
 
           <div className="form-card">
@@ -78,9 +79,9 @@ export default function BrandApplyPage() {
                   Thanks {contactName.trim().split(' ')[0]} — our team will review {brandName.trim()} and email you
                   within 48 hours.
                 </p>
-                <a href="/" className="btn btn-ink">
+                <Link to="/" className="btn btn-ink">
                   Back to home
-                </a>
+                </Link>
               </div>
             ) : (
               <>

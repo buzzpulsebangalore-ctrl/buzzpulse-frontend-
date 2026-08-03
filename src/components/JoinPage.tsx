@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Building2, Star } from 'lucide-react';
 import LoginModal from './LoginModal';
 
@@ -11,9 +12,9 @@ export default function JoinPage() {
       <div className="blob b2" style={{ opacity: 0.16 }} />
 
       <div className="auth-page-header">
-        <a href="/" className="logo">
+        <Link to="/" className="logo">
           <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
-        </a>
+        </Link>
       </div>
 
       <div className="auth-page-body">
@@ -22,20 +23,20 @@ export default function JoinPage() {
           <p className="modal-hint">How do you want to use the platform?</p>
 
           <div className="join-options">
-            <a href="/join/brand" className="join-option">
+            <Link to="/join/brand" className="join-option">
               <span className="join-option-icon join-option-icon-brand">
                 <Building2 size={22} strokeWidth={2} style={{ border: 'none' }} />
               </span>
               <b>I'm a Brand</b>
               <span>Discover creators, run campaigns, track ROI.</span>
-            </a>
-            <a href="/join/creator" className="join-option">
+            </Link>
+            <Link to="/join/creator" className="join-option">
               <span className="join-option-icon join-option-icon-creator">
                 <Star size={22} strokeWidth={2} style={{ border: 'none' }} />
               </span>
               <b>I'm a Creator</b>
               <span>Get matched with paid brand collaborations.</span>
-            </a>
+            </Link>
           </div>
 
           <p className="join-login-hint">

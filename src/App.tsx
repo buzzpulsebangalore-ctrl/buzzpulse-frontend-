@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom';
 import Ticker from './components/Ticker';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
@@ -21,68 +22,18 @@ import CreatorDashboard from './components/CreatorDashboard';
 import JoinPage from './components/JoinPage';
 import CreatorApplyPage from './components/CreatorApplyPage';
 import BrandApplyPage from './components/BrandApplyPage';
+import AboutPage from './components/AboutPage';
+import ContactPage from './components/ContactPage';
+import CaseStudiesPage from './components/CaseStudiesPage';
+import CareersPage from './components/CareersPage';
+import BlogPage from './components/BlogPage';
+import GuidesPage from './components/GuidesPage';
 import ToastHost from './components/Toast';
+import ScrollToTop from './components/ScrollToTop';
 
-export default function App() {
-  const path = window.location.pathname;
-
-  if (path === '/join') {
-    return (
-      <>
-        <ToastHost />
-        <JoinPage />
-      </>
-    );
-  }
-
-  if (path === '/join/creator') {
-    return (
-      <>
-        <ToastHost />
-        <CreatorApplyPage />
-      </>
-    );
-  }
-
-  if (path === '/join/brand') {
-    return (
-      <>
-        <ToastHost />
-        <BrandApplyPage />
-      </>
-    );
-  }
-
-  if (path === '/admin-login') {
-    return (
-      <>
-        <ToastHost />
-        <AdminLoginPage />
-      </>
-    );
-  }
-
-  if (path === '/admin') {
-    return (
-      <>
-        <ToastHost />
-        <AdminDashboard />
-      </>
-    );
-  }
-
-  if (path === '/creator') {
-    return (
-      <>
-        <ToastHost />
-        <CreatorDashboard />
-      </>
-    );
-  }
-
+function HomePage() {
   return (
     <>
-      <ToastHost />
       <Ticker />
       <Nav />
       <Hero />
@@ -100,6 +51,30 @@ export default function App() {
       <Faq />
       <FinalCta />
       <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <ToastHost />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/case-studies" element={<CaseStudiesPage />} />
+        <Route path="/careers" element={<CareersPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/guides" element={<GuidesPage />} />
+        <Route path="/join" element={<JoinPage />} />
+        <Route path="/join/creator" element={<CreatorApplyPage />} />
+        <Route path="/join/brand" element={<BrandApplyPage />} />
+        <Route path="/admin-login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/creator" element={<CreatorDashboard />} />
+      </Routes>
     </>
   );
 }

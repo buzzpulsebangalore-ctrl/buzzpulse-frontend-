@@ -1,17 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { WRAP } from '../styles';
 import LoginModal from './LoginModal';
 import { getCookie } from '../utils/cookies';
-
-function goToDashboard() {
-  const role = getCookie('role');
-  window.location.assign(role === 'ADMIN' ? '/admin' : '/creator');
-}
-
-function hrefFor(id: string) {
-  return id === 'join' ? '/join/creator' : `#${id}`;
-}
 
 interface NavLink {
   id: string;
@@ -19,15 +11,9 @@ interface NavLink {
   desc?: string;
 }
 
-interface NavColumn {
-  title: string;
-  links: NavLink[];
-}
-
 interface NavGroup {
   label: string;
-  links?: NavLink[];
-  columns?: NavColumn[];
+  links: NavLink[];
 }
 
 const navGroups: NavGroup[] = [
@@ -57,30 +43,55 @@ const navGroups: NavGroup[] = [
   },
   {
     label: 'Resources',
-    columns: [
-      {
-        title: 'Learn',
-        links: [
-          { id: 'blog', label: 'Blog' },
-          { id: 'academy', label: 'Academy' },
-          { id: 'guides', label: 'Guides' },
-          { id: 'webinars', label: 'Webinars' },
-        ],
-      },
-      {
-        title: 'Proof',
-        links: [
-          { id: 'case-studies', label: 'Case Studies' },
-          { id: 'reports', label: 'Reports' },
-          { id: 'roi-calculator', label: 'ROI Calculator' },
-          { id: 'api-docs', label: 'API Docs' },
-        ],
-      },
+    links: [
+      { id: 'blog', label: 'Blog', desc: 'Strategy, ROI and product updates' },
+      { id: 'guides', label: 'Guides', desc: 'Step-by-step how-tos for brands & creators' },
+      { id: 'case-studies', label: 'Case Studies', desc: 'Real campaigns, real numbers' },
     ],
   },
 ];
 
+function GroupLink({
+  id,
+  className,
+  onNavigate,
+  children,
+}: {
+  id: string;
+  className: string;
+  onNavigate: () => void;
+  children: ReactNode;
+}) {
+  if (id === 'join') {
+    return (
+      <Link to="/join/creator" onClick={onNavigate} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  if (id === 'case-studies') {
+    return (
+      <Link to="/case-studies" onClick={onNavigate} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  if (id === 'blog' || id === 'guides') {
+    return (
+      <Link to={`/${id}`} onClick={onNavigate} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={`#${id}`} onClick={onNavigate} className={className}>
+      {children}
+    </a>
+  );
+}
+
 export default function Nav() {
+  const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
@@ -96,10 +107,15 @@ export default function Nav() {
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
+  function goToDashboard() {
+    const role = getCookie('role');
+    navigate(role === 'ADMIN' ? '/admin' : '/creator');
+  }
+
   function handleSignup() {
     setMenuOpen(false);
     if (loggedIn) goToDashboard();
-    else window.location.assign('/join');
+    else navigate('/join');
   }
 
   function handleLoginOrDashboard() {
@@ -111,9 +127,9 @@ export default function Nav() {
   return (
     <nav>
       <div className={`${WRAP} nav-in`}>
-        <div className="logo">
+        <Link to="/" className="logo">
           <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
-        </div>
+        </Link>
         <div className="nav-links" ref={groupsRef}>
           {navGroups.map((g) => (
             <div key={g.label} className="relative">
@@ -131,39 +147,18 @@ export default function Nav() {
                   className={`opacity-60 transition-transform duration-200 ${openGroup === g.label ? 'rotate-180' : ''}`}
                 />
               </button>
-              {openGroup === g.label && g.links && (
+              {openGroup === g.label && (
                 <div className="absolute left-1/2 top-[calc(100%+10px)] z-50 w-72 -translate-x-1/2 rounded-2xl border border-black/5 bg-white p-3 shadow-[0_24px_48px_-18px_rgba(10,10,15,.35)]">
                   {g.links.map((l) => (
-                    <a
+                    <GroupLink
                       key={l.id}
-                      href={hrefFor(l.id)}
-                      onClick={() => setOpenGroup(null)}
+                      id={l.id}
+                      onNavigate={() => setOpenGroup(null)}
                       className="block rounded-xl px-4 py-3 transition-colors hover:bg-[#F3EFFF]"
                     >
                       <span className="block text-sm font-bold text-(--ink)">{l.label}</span>
                       {l.desc && <span className="mt-0.5 block text-xs text-[#68687A]">{l.desc}</span>}
-                    </a>
-                  ))}
-                </div>
-              )}
-              {openGroup === g.label && g.columns && (
-                <div className="absolute left-1/2 top-[calc(100%+10px)] z-50 flex w-[420px] -translate-x-1/2 gap-2 rounded-2xl border border-black/5 bg-white p-4 shadow-[0_24px_48px_-18px_rgba(10,10,15,.35)]">
-                  {g.columns.map((col) => (
-                    <div key={col.title} className="flex-1">
-                      <span className="mb-1 block px-3 text-[11px] font-bold uppercase tracking-widest text-[#9A9AA8]">
-                        {col.title}
-                      </span>
-                      {col.links.map((l) => (
-                        <a
-                          key={l.id}
-                          href={hrefFor(l.id)}
-                          onClick={() => setOpenGroup(null)}
-                          className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-(--ink) transition-colors hover:bg-[#F3EFFF]"
-                        >
-                          {l.label}
-                        </a>
-                      ))}
-                    </div>
+                    </GroupLink>
                   ))}
                 </div>
               )}
@@ -216,32 +211,15 @@ export default function Nav() {
                   className={`grid transition-[grid-template-rows] duration-300 ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
                 >
                   <div className="overflow-hidden pb-2">
-                    {g.links?.map((l) => (
-                      <a
+                    {g.links.map((l) => (
+                      <GroupLink
                         key={l.id}
-                        href={hrefFor(l.id)}
-                        onClick={() => setMenuOpen(false)}
+                        id={l.id}
+                        onNavigate={() => setMenuOpen(false)}
                         className="block rounded-lg px-1 py-2.5 text-sm font-semibold text-[#45454E]"
                       >
                         {l.label}
-                      </a>
-                    ))}
-                    {g.columns?.map((col) => (
-                      <div key={col.title} className="mt-1">
-                        <span className="block px-1 pt-1.5 text-[10px] font-bold uppercase tracking-widest text-[#9A9AA8]">
-                          {col.title}
-                        </span>
-                        {col.links.map((l) => (
-                          <a
-                            key={l.id}
-                            href={hrefFor(l.id)}
-                            onClick={() => setMenuOpen(false)}
-                            className="block rounded-lg px-1 py-2.5 text-sm font-semibold text-[#45454E]"
-                          >
-                            {l.label}
-                          </a>
-                        ))}
-                      </div>
+                      </GroupLink>
                     ))}
                   </div>
                 </div>

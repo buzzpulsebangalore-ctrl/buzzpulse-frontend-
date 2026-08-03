@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { brandsHiring } from '../data';
 import { WRAP, SECTION_PAD } from '../styles';
@@ -61,9 +62,9 @@ export default function BrandsHiring() {
           ))}
         </div>
         <div className="mt-9 text-center">
-          <button className="btn btn-ink btn-lg" onClick={() => window.location.assign('/join/creator')}>
+          <Link to="/join/creator" className="btn btn-ink btn-lg">
             Join as a creator — get matched
-          </button>
+          </Link>
         </div>
       </div>
     </section>

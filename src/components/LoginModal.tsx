@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { login } from '../api/auth';
 import { setCookie } from '../utils/cookies';
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function LoginModal({ onClose }: Props) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -46,7 +48,7 @@ export default function LoginModal({ onClose }: Props) {
       const displayName = res.user.fullName?.trim().split(' ')[0] || res.user.email;
       toast(`Welcome back, ${displayName}!`, 'success');
       onClose();
-      window.location.assign('/creator');
+      navigate('/creator');
     } catch (err) {
       console.error('Login failed:', err);
       toast('Login failed. Check your email and password.', 'error');

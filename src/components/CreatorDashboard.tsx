@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, type NavigateFunction } from 'react-router-dom';
 import { Camera, X, Mail, MapPin, CalendarDays } from 'lucide-react';
 import { getMyProfile, updateMyProfile, updateMyAvatar, type CreatorProfileResponse } from '../api/creators';
 import { deleteCookie, getCookie } from '../utils/cookies';
@@ -9,10 +10,10 @@ import { formatFollowers, getInitials } from '../utils/format';
 
 const platforms = ['INSTAGRAM', 'YOUTUBE', 'TIKTOK', 'TWITTER', 'FACEBOOK'];
 
-function redirectToLogin() {
+function redirectToLogin(navigate: NavigateFunction) {
   deleteCookie('access_token');
   deleteCookie('role');
-  window.location.assign('/');
+  navigate('/');
 }
 
 interface FormState {
@@ -113,6 +114,7 @@ function AvatarUploadModal({
 }
 
 export default function CreatorDashboard() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<CreatorProfileResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -124,7 +126,7 @@ export default function CreatorDashboard() {
 
   useEffect(() => {
     if (!getCookie('access_token')) {
-      redirectToLogin();
+      redirectToLogin(navigate);
       return;
     }
 
@@ -133,7 +135,7 @@ export default function CreatorDashboard() {
       .catch((err) => {
         console.error('Failed to load profile:', err);
         if (String(err.message).includes('401')) {
-          redirectToLogin();
+          redirectToLogin(navigate);
           return;
         }
         setLoadError("Couldn't load your profile. Please try again.");

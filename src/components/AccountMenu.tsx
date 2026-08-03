@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { deleteCookie, getCookie } from '../utils/cookies';
 import ChangePasswordModal from './ChangePasswordModal';
 
 export default function AccountMenu() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -20,7 +22,7 @@ export default function AccountMenu() {
   function logout() {
     deleteCookie('access_token');
     deleteCookie('role');
-    window.location.assign('/');
+    navigate('/');
   }
 
   return (
@@ -32,9 +34,9 @@ export default function AccountMenu() {
 
       {open && (
         <div className="account-menu-dropdown">
-          <a href="/" className="account-menu-item">
+          <Link to="/" className="account-menu-item">
             &larr; Back to site
-          </a>
+          </Link>
           <button
             type="button"
             className="account-menu-item"

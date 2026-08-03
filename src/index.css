@@ -162,9 +162,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.86);backdrop-
 .svc p{font-size:14px;line-height:1.55;opacity:.92;position:relative;z-index:2}
 .s1{background:linear-gradient(140deg,#FF962D,#FF7A00)}
 .s2{background:linear-gradient(140deg,#2F6FED,#0B3FA8)}
-.s3{background:linear-gradient(140deg,#17171F,#0A0A0F)}
+.s3{background:linear-gradient(140deg,#0B3FA8,#FF7A00)}
 .s4{background:linear-gradient(140deg,#FFB066,#FF962D)}
-.s5{background:linear-gradient(140deg,#0A0A0F,#123A8F)}
+.s5{background:linear-gradient(140deg,#123A8F,#2F6FED)}
 .s6{background:linear-gradient(140deg,#FF962D,#2F6FED)}
 
 /* ---------- PROCESS ---------- */
@@ -235,7 +235,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--violet);box
 @keyframes toast-in{from{transform:translateX(24px);opacity:0}to{transform:translateX(0);opacity:1}}
 
 /* ---------- CTA ---------- */
-.final-cta{background:linear-gradient(100deg,#FFA53E 0%,#FF4D6D 26%,#C026D3 50%,#7C3AED 72%,#14B8A6 100%);padding:78px 0;text-align:center;color:#fff}
+.final-cta{background:var(--grad);padding:78px 0;text-align:center;color:#fff}
 .final-cta-in{display:flex;flex-direction:column;align-items:center}
 .final-cta h2{font-size:clamp(32px,4.4vw,54px);margin-bottom:16px;text-shadow:0 4px 20px rgba(0,0,0,.15)}
 .final-cta p{font-size:18px;max-width:520px;margin:0 auto 30px;opacity:.95}
@@ -393,7 +393,7 @@ footer{background:var(--ink);color:#fff;padding:44px 0 20px}
 .admin-stat-total{background:linear-gradient(140deg,#FF962D,#2F6FED)}
 .admin-stat-pending{background:linear-gradient(140deg,#FF962D,#FF7A00)}
 .admin-stat-approved{background:linear-gradient(140deg,#2F6FED,#0B3FA8)}
-.admin-stat-rejected{background:linear-gradient(140deg,#17171F,#0A0A0F)}
+.admin-stat-rejected{background:linear-gradient(140deg,#123A8F,#0B3FA8)}
 .admin-stat-skel{background:#ECECF1;box-shadow:none}
 .admin-stat-skel::after{display:none}
 .admin-skel-icon{width:26px;height:26px;border-radius:8px;background:#DEDEE6;margin-bottom:26px;animation:skeleton-pulse 1.6s ease-in-out infinite}

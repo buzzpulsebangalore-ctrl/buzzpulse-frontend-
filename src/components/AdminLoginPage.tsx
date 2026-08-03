@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
 import { login } from '../api/auth';
 import { setCookie } from '../utils/cookies';
 import { toast } from './Toast';
 
 export default function AdminLoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -27,7 +29,7 @@ export default function AdminLoginPage() {
       }
       setCookie('access_token', res.access_token);
       setCookie('role', res.user.role);
-      window.location.assign('/admin');
+      navigate('/admin');
     } catch (err) {
       console.error('Admin login failed:', err);
       toast('Invalid credentials or insufficient access.', 'error');

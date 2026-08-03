@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Handshake, Clapperboard, Bot, Share2, TrendingUp, Repeat, type LucideIcon } from 'lucide-react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { WRAP, SECTION_PAD } from '../styles';
@@ -26,7 +27,7 @@ const solutions: Solution[] = [
     icon: Bot,
     title: 'AI-Generated Influencer Content',
     desc: 'Promote your products with high-performing videos featuring AI avatars, built to your brand’s requirements. Perfect for social media and audience education.',
-    gradient: 'from-(--cyan) to-(--ink)',
+    gradient: 'from-(--cyan) to-(--amber)',
   },
   {
     icon: Share2,
@@ -38,7 +39,7 @@ const solutions: Solution[] = [
     icon: TrendingUp,
     title: 'Performance Marketing',
     desc: 'Performance-based campaigns targeted at specific business goals, engineered for consistent results, sales growth and a better cost-per-result.',
-    gradient: 'from-(--violet) to-(--ink)',
+    gradient: 'from-(--violet) to-(--amber)',
   },
   {
     icon: Repeat,
@@ -62,13 +63,12 @@ function SolutionCard({ solution, index }: { solution: Solution; index: number }
       </div>
       <h3 className="mb-2.5 text-[19px] font-bold tracking-tight">{solution.title}</h3>
       <p className="text-sm leading-relaxed text-[#54506E]">{solution.desc}</p>
-      <button
-        type="button"
-        onClick={() => window.location.assign('/join/creator')}
+      <Link
+        to="/join/creator"
         className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-(--violet) transition-all group-hover:gap-2.5"
       >
         Learn more →
-      </button>
+      </Link>
     </div>
   );
 }

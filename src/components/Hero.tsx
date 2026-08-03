@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { WRAP } from '../styles';
 import { brands } from '../data';
 import HeroWall from './HeroWall';
@@ -44,9 +45,9 @@ export default function Hero() {
             <button className="btn btn-ink btn-lg" onClick={() => scrollTo('creators')}>
               Find creators
             </button>
-            <button className="btn btn-ghost btn-lg" onClick={() => window.location.assign('/join/creator')}>
+            <Link to="/join/creator" className="btn btn-ghost btn-lg">
               Become a creator
-            </button>
+            </Link>
           </div>
 
           <div className="hero-stats">
