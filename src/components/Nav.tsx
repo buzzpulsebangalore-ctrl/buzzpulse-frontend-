@@ -80,12 +80,11 @@ const navGroups: NavGroup[] = [
   },
 ];
 
-const mobileLinks: NavLink[] = navGroups.flatMap((g) => g.links ?? g.columns?.flatMap((c) => c.links) ?? []);
-
 export default function Nav() {
   const [showLogin, setShowLogin] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [mobileOpenGroup, setMobileOpenGroup] = useState<string | null>(null);
   const groupsRef = useRef<HTMLDivElement>(null);
   const loggedIn = !!getCookie('access_token');
 
@@ -195,11 +194,60 @@ export default function Nav() {
 
       {menuOpen && (
         <div className={`${WRAP} nav-mobile`}>
-          {mobileLinks.map((l) => (
-            <a key={l.id} href={hrefFor(l.id)} onClick={() => setMenuOpen(false)}>
-              {l.label}
-            </a>
-          ))}
+          {navGroups.map((g) => {
+            const isOpen = mobileOpenGroup === g.label;
+            return (
+              <div key={g.label} className="border-b border-black/[.06]">
+                <button
+                  type="button"
+                  onClick={() => setMobileOpenGroup(isOpen ? null : g.label)}
+                  className="flex w-full items-center justify-between py-3.5 text-left text-[15px] font-bold text-(--ink)"
+                  aria-expanded={isOpen}
+                >
+                  {g.label}
+                  <ChevronDown
+                    size={16}
+                    strokeWidth={2.5}
+                    style={{ border: 'none' }}
+                    className={`opacity-60 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                <div
+                  className={`grid transition-[grid-template-rows] duration-300 ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+                >
+                  <div className="overflow-hidden pb-2">
+                    {g.links?.map((l) => (
+                      <a
+                        key={l.id}
+                        href={hrefFor(l.id)}
+                        onClick={() => setMenuOpen(false)}
+                        className="block rounded-lg px-1 py-2.5 text-sm font-semibold text-[#45454E]"
+                      >
+                        {l.label}
+                      </a>
+                    ))}
+                    {g.columns?.map((col) => (
+                      <div key={col.title} className="mt-1">
+                        <span className="block px-1 pt-1.5 text-[10px] font-bold uppercase tracking-widest text-[#9A9AA8]">
+                          {col.title}
+                        </span>
+                        {col.links.map((l) => (
+                          <a
+                            key={l.id}
+                            href={hrefFor(l.id)}
+                            onClick={() => setMenuOpen(false)}
+                            className="block rounded-lg px-1 py-2.5 text-sm font-semibold text-[#45454E]"
+                          >
+                            {l.label}
+                          </a>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
           <div className="nav-mobile-actions">
             <button className="btn btn-ghost" onClick={handleSignup}>
               Signup

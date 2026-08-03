@@ -520,9 +520,7 @@ footer{background:var(--ink);color:#fff;padding:44px 0 20px}
   .nav-links{display:none}
   .nav-actions{display:none}
   .menu-btn{display:block}
-  .nav-mobile{display:flex;flex-direction:column;padding-top:8px;padding-bottom:18px;border-top:1px solid rgba(10,10,15,.08);background:rgba(255,255,255,.98);animation:fade .25s ease}
-  .nav-mobile a{padding:13px 2px;font-size:15px;font-weight:700;border-bottom:1px solid rgba(10,10,15,.06)}
-  .nav-mobile a:last-of-type{border-bottom:0}
+  .nav-mobile{display:flex;flex-direction:column;padding-top:4px;padding-bottom:18px;max-height:calc(100vh - 74px);overflow-y:auto;border-top:1px solid rgba(10,10,15,.08);background:rgba(255,255,255,.98);animation:fade .25s ease}
   .nav-mobile-actions{display:flex;flex-direction:column;gap:10px;margin-top:16px}
   .nav-mobile-actions .btn{width:100%}
   .hero-grid,.su-grid{grid-template-columns:1fr}
