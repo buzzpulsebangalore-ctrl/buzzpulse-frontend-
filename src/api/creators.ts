@@ -153,14 +153,35 @@ export interface PublicCreatorsResponse {
   };
 }
 
+const PUBLIC_CREATORS_CACHE_TTL_MS = 60_000;
+const publicCreatorsCache = new Map<number, { data: PublicCreatorsResponse; expiresAt: number }>();
+const publicCreatorsInFlight = new Map<number, Promise<PublicCreatorsResponse>>();
+
 export async function listPublicCreators(page = 1): Promise<PublicCreatorsResponse> {
-  const res = await fetch(`${API_BASE_URL}/creators/public?page=${page}`);
+  const cached = publicCreatorsCache.get(page);
+  if (cached && cached.expiresAt > Date.now()) return cached.data;
 
-  if (!res.ok) {
-    throw new Error(`List public creators failed with status ${res.status}${await readErrorMessage(res)}`);
+  const inFlight = publicCreatorsInFlight.get(page);
+  if (inFlight) return inFlight;
+
+  const request = (async () => {
+    const res = await fetch(`${API_BASE_URL}/creators/public?page=${page}`);
+
+    if (!res.ok) {
+      throw new Error(`List public creators failed with status ${res.status}${await readErrorMessage(res)}`);
+    }
+
+    const data: PublicCreatorsResponse = await res.json();
+    publicCreatorsCache.set(page, { data, expiresAt: Date.now() + PUBLIC_CREATORS_CACHE_TTL_MS });
+    return data;
+  })();
+
+  publicCreatorsInFlight.set(page, request);
+  try {
+    return await request;
+  } finally {
+    publicCreatorsInFlight.delete(page);
   }
-
-  return res.json();
 }
 
 export async function updateCreatorStatus(id: string, status: CreatorStatus): Promise<CreatorProfileResponse> {
@@ -174,5 +195,6 @@ export async function updateCreatorStatus(id: string, status: CreatorStatus): Pr
     throw new Error(`Update creator status failed with status ${res.status}${await readErrorMessage(res)}`);
   }
 
+  publicCreatorsCache.clear();
   return res.json();
 }

@@ -84,9 +84,9 @@ function GroupLink({
     );
   }
   return (
-    <a href={`#${id}`} onClick={onNavigate} className={className}>
+    <Link to={`/#${id}`} onClick={onNavigate} className={className}>
       {children}
-    </a>
+    </Link>
   );
 }
 

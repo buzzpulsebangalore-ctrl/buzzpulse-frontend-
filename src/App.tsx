@@ -30,8 +30,10 @@ import BlogPage from './components/BlogPage';
 import GuidesPage from './components/GuidesPage';
 import ToastHost from './components/Toast';
 import ScrollToTop from './components/ScrollToTop';
+import { useHashScroll } from './hooks/useHashScroll';
 
 function HomePage() {
+  useHashScroll();
   return (
     <>
       <Ticker />

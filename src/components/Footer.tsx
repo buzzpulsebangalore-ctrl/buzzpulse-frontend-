@@ -176,13 +176,13 @@ export default function Footer() {
             <h4>Platform</h4>
             <ul>
               <li>
-                <a href="#creators">Creator Network</a>
+                <Link to="/#creators">Creator Network</Link>
               </li>
               <li>
-                <a href="#services">Services</a>
+                <Link to="/#services">Services</Link>
               </li>
               <li>
-                <a href="#process">Process</a>
+                <Link to="/#process">Process</Link>
               </li>
               <li>
                 <Link to="/join/creator">Become a Creator</Link>
@@ -193,13 +193,13 @@ export default function Footer() {
             <h4>Solutions</h4>
             <ul>
               <li>
-                <a href="#services">What We Do</a>
+                <Link to="/#services">What We Do</Link>
               </li>
               <li>
-                <a href="#process">Our Process</a>
+                <Link to="/#process">Our Process</Link>
               </li>
               <li>
-                <a href="#ai-content">AI Content Showcase</a>
+                <Link to="/#ai-content">AI Content Showcase</Link>
               </li>
             </ul>
           </div>
