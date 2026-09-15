@@ -17,7 +17,7 @@ export default function Faq() {
           {faqs.map((f, i) => {
             const open = openIndex === i;
             return (
-              <div key={f.q} className="mb-3 overflow-hidden rounded-2xl border border-black/5 bg-white">
+              <div key={f.q} className="mb-3 overflow-hidden rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md">
                 <button
                   type="button"
                   onClick={() => setOpenIndex(open ? null : i)}

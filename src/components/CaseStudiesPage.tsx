@@ -267,52 +267,44 @@ const timeline: { icon: LucideIcon; title: string; desc: string }[] = [
   { icon: BarChart3, title: 'Analytics', desc: 'Full ROI report' },
 ];
 
-const whyUs: { icon: LucideIcon; gradient: string; title: string; desc: string }[] = [
+const whyUs: { icon: LucideIcon; title: string; desc: string }[] = [
   {
     icon: Bot,
-    gradient: 'from-(--hot) to-(--violet)',
     title: 'AI creator discovery',
     desc: 'Search 10M+ profiles by intent and get AI-ranked fit scores.',
   },
   {
     icon: ShieldCheck,
-    gradient: 'from-(--violet) to-(--cyan)',
     title: 'Fraud detection',
     desc: 'Fake-follower and engagement-pod screening on every profile.',
   },
   {
     icon: Settings,
-    gradient: 'from-(--cyan) to-(--amber)',
     title: 'Campaign automation',
     desc: 'Briefs, approvals, deliverables and reminders on autopilot.',
   },
   {
     icon: BadgeCheck,
-    gradient: 'from-(--amber) to-(--hot)',
     title: 'Verified creators',
     desc: 'Manually vetted audiences and brand-safety scoring.',
   },
   {
     icon: BarChart3,
-    gradient: 'from-(--violet) to-(--amber)',
     title: 'Analytics dashboard',
     desc: 'Live reach, engagement and conversion tracking.',
   },
   {
     icon: TrendingUp,
-    gradient: 'from-(--hot) to-(--amber)',
     title: 'ROI tracking',
     desc: 'UTM and deep-link attribution tied back to revenue.',
   },
   {
     icon: Repeat,
-    gradient: 'from-(--cyan) to-(--violet)',
     title: 'End-to-end management',
     desc: 'Concept to payout in a single workspace.',
   },
   {
     icon: Users,
-    gradient: 'from-(--amber) to-(--violet)',
     title: 'Dedicated support',
     desc: 'A strategist on every enterprise campaign.',
   },
@@ -422,7 +414,7 @@ function CaseStudyModal({ cs, onClose }: { cs: CaseStudy; onClose: () => void })
         <div className="overflow-y-auto">
           <div
             className="relative p-8 text-white"
-            style={{ background: `linear-gradient(135deg,${cs.from},${cs.to})`, borderRadius: '26px 26px 0 0' }}
+            style={{ background: 'var(--ink)', borderRadius: '26px 26px 0 0' }}
           >
             <div
               className="mb-4 grid h-13 w-13 place-items-center rounded-2xl bg-white text-[20px] font-black"
@@ -492,13 +484,13 @@ function FeaturedCase({ cs, index, onOpen }: { cs: CaseStudy; index: number; onO
   return (
     <article
       ref={ref}
-      className={`reveal grid overflow-hidden rounded-[22px] border border-black/5 bg-white shadow-[0_20px_44px_-24px_rgba(10,10,15,.3)] lg:grid-cols-2`}
+      className={`reveal grid overflow-hidden rounded-[22px] border border-black/5 bg-white/85 backdrop-blur-md shadow-[0_20px_44px_-24px_rgba(10,10,15,.3)] lg:grid-cols-2`}
       style={{ transitionDelay: `${index * 0.08}s` }}
     >
       <div
         className={`relative min-h-[280px] bg-cover bg-center ${reversed ? 'lg:order-2' : ''}`}
         style={{
-          backgroundImage: `linear-gradient(140deg,${cs.from}dd,rgba(10,10,15,.35)), url('https://picsum.photos/seed/${cs.imgSeed}/700/500')`,
+          backgroundImage: `linear-gradient(180deg,rgba(10,10,15,.2),rgba(10,10,15,.6)), url('https://picsum.photos/seed/${cs.imgSeed}/700/500')`,
         }}
       >
         <div className="absolute left-5 top-5 flex items-center gap-2 rounded-xl bg-white/95 px-3.5 py-2 font-extrabold backdrop-blur">
@@ -552,13 +544,13 @@ function LibraryCard({ cs, onOpen }: { cs: CaseStudy; onOpen: (id: string) => vo
   return (
     <article
       ref={ref}
-      className="reveal flex cursor-pointer flex-col overflow-hidden rounded-[18px] border border-black/5 bg-white shadow-[0_10px_26px_-16px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.32)]"
+      className="reveal flex cursor-pointer flex-col overflow-hidden rounded-[18px] border border-black/5 bg-white/85 backdrop-blur-md shadow-[0_10px_26px_-16px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.32)]"
       onClick={() => onOpen(cs.id)}
     >
       <div
         className="relative h-[120px] bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(140deg,${cs.from}cc,rgba(10,10,15,.3)), url('https://picsum.photos/seed/${cs.imgSeed}/500/300')`,
+          backgroundImage: `linear-gradient(180deg,rgba(10,10,15,.15),rgba(10,10,15,.55)), url('https://picsum.photos/seed/${cs.imgSeed}/500/300')`,
         }}
       >
         <div
@@ -739,9 +731,9 @@ export default function CaseStudiesPage() {
               return (
                 <div
                   key={w.title}
-                  className="rounded-2xl border border-black/5 bg-white p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)] transition-transform duration-200 hover:-translate-y-1"
+                  className="rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)] transition-transform duration-200 hover:-translate-y-1"
                 >
-                  <div className={`mb-3.5 grid h-11.5 w-11.5 place-items-center rounded-xl bg-linear-to-br ${w.gradient} text-white`}>
+                  <div className="mb-3.5 grid h-11.5 w-11.5 place-items-center rounded-xl bg-(--ink) text-white">
                     <Icon size={21} strokeWidth={1.8} style={{ border: 'none' }} />
                   </div>
                   <h4 className="mb-1.5 text-base font-bold">{w.title}</h4>
@@ -763,7 +755,7 @@ export default function CaseStudiesPage() {
             {testimonials.map((t) => (
               <div
                 key={t.name}
-                className="rounded-[20px] border border-black/5 bg-white p-6.5 shadow-[0_20px_40px_-24px_rgba(10,10,15,.25)]"
+                className="rounded-[20px] border border-black/5 bg-white/85 backdrop-blur-md p-6.5 shadow-[0_20px_40px_-24px_rgba(10,10,15,.25)]"
               >
                 <div className="mb-3 flex gap-0.5 text-(--amber)">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -801,7 +793,7 @@ export default function CaseStudiesPage() {
               return (
                 <div
                   key={ind.label}
-                  className="rounded-2xl border border-black/5 bg-white px-4 py-6 text-center shadow-[0_10px_26px_-18px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1 hover:border-(--violet)"
+                  className="rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md px-4 py-6 text-center shadow-[0_10px_26px_-18px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1 hover:border-(--violet)"
                 >
                   <Icon size={26} strokeWidth={1.8} className="mx-auto mb-2.5" style={{ border: 'none' }} />
                   <b className="text-sm font-bold">{ind.label}</b>
@@ -822,7 +814,7 @@ export default function CaseStudiesPage() {
             {faqs.map((f, i) => {
               const open = openFaq === i;
               return (
-                <div key={f[0]} className="mb-3 overflow-hidden rounded-2xl border border-black/5 bg-white">
+                <div key={f[0]} className="mb-3 overflow-hidden rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md">
                   <button
                     type="button"
                     onClick={() => setOpenFaq(open ? null : i)}

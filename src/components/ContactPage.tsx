@@ -23,7 +23,6 @@ import { WRAP, SECTION_PAD } from '../styles';
 
 interface Channel {
   icon: LucideIcon;
-  gradient: string;
   title: string;
   desc: string;
   action: string;
@@ -33,7 +32,6 @@ interface Channel {
 const channels: Channel[] = [
   {
     icon: Handshake,
-    gradient: 'from-(--hot) to-(--violet)',
     title: 'Talk to sales',
     desc: 'Planning a campaign or want a platform walkthrough? We’ll get back within a business day.',
     action: 'sales@thebuzzpulse.com',
@@ -41,7 +39,6 @@ const channels: Channel[] = [
   },
   {
     icon: MessageCircle,
-    gradient: 'from-(--violet) to-(--cyan)',
     title: 'Get support',
     desc: 'Already on the platform and need a hand with your account, a booking or a payment?',
     action: 'support@thebuzzpulse.com',
@@ -49,7 +46,6 @@ const channels: Channel[] = [
   },
   {
     icon: Phone,
-    gradient: 'from-(--amber) to-(--hot)',
     title: 'Call us',
     desc: 'Prefer to talk it through? Reach the team directly, Mon–Sat, 10am–7pm IST.',
     action: '+91 98765 43210',
@@ -95,7 +91,7 @@ function ChannelCard({ c, index }: { c: Channel; index: number }) {
       className="reveal group block rounded-[20px] border border-black/5 bg-white p-7 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.28)]"
       style={{ transitionDelay: `${index * 0.07}s` }}
     >
-      <div className={`mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-linear-to-br ${c.gradient} text-white`}>
+      <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-(--ink) text-white">
         <Icon size={24} strokeWidth={1.8} style={{ border: 'none' }} />
       </div>
       <h3 className="mb-2.5 text-[19px] font-bold tracking-tight">{c.title}</h3>
@@ -116,8 +112,6 @@ export default function ContactPage() {
       <Nav />
 
       <section className="hero" style={{ padding: '64px 0 40px' }}>
-        <div className="blob b1" />
-        <div className="blob b2" />
         <div className={`${WRAP} relative z-2 mx-auto max-w-190 text-center`}>
           <div className="eyebrow mx-auto">
             <span className="dot" /> We reply within 48 hours
@@ -181,7 +175,7 @@ export default function ContactPage() {
               })}
             </div>
           </div>
-          <div className="rounded-3xl border border-black/5 bg-white p-8 shadow-[0_20px_44px_-20px_rgba(10,10,15,.25)]">
+          <div className="rounded-3xl border border-black/5 bg-white/85 backdrop-blur-md p-8 shadow-[0_20px_44px_-20px_rgba(10,10,15,.25)]">
             <span className="tag t-pink">Our promise</span>
             <ul className="flex flex-col gap-5">
               {[
@@ -214,7 +208,7 @@ export default function ContactPage() {
             {faqs.map((f, i) => {
               const open = openFaq === i;
               return (
-                <div key={f[0]} className="mb-3 overflow-hidden rounded-2xl border border-black/5 bg-white">
+                <div key={f[0]} className="mb-3 overflow-hidden rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md">
                   <button
                     type="button"
                     onClick={() => setOpenFaq(open ? null : i)}

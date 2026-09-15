@@ -8,8 +8,6 @@ export default function JoinPage() {
 
   return (
     <div className="auth-page">
-      <div className="blob b1" style={{ opacity: 0.16 }} />
-      <div className="blob b2" style={{ opacity: 0.16 }} />
 
       <div className="auth-page-header">
         <Link to="/" className="logo">

@@ -23,7 +23,7 @@ export default function CreatorCard({ creator, index, onBook, bookingDisabled }:
       className="ccard reveal"
       style={{ transitionDelay: `${(index % 4) * 0.07}s` }}
     >
-      <div className="cc-cover" style={{ background: `linear-gradient(120deg, var(${nicheColorVar}), var(--violet))` }} />
+      <div className="cc-cover" />
       <div className="cc-top">
         {creator.avatarUrl ? (
           <img className="cc-av" src={creator.avatarUrl} alt={creator.fullName} />

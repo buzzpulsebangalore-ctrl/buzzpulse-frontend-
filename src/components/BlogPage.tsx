@@ -149,7 +149,7 @@ function PostModal({ post, onClose }: { post: Post; onClose: () => void }) {
         <div className="overflow-y-auto">
           <div
             className="relative flex min-h-[180px] flex-col justify-end p-8 text-white"
-            style={{ background: `linear-gradient(135deg,${post.from},${post.to})`, borderRadius: '26px 26px 0 0' }}
+            style={{ background: 'var(--ink)', borderRadius: '26px 26px 0 0' }}
           >
             <span className="mb-3 inline-block w-fit rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wide backdrop-blur">
               {post.category}
@@ -187,13 +187,13 @@ function PostCard({ post, onOpen, featured }: { post: Post; onOpen: (id: string)
   return (
     <article
       ref={ref}
-      className={`reveal flex cursor-pointer flex-col overflow-hidden rounded-[18px] border border-black/5 bg-white shadow-[0_10px_26px_-16px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.32)] ${featured ? 'lg:flex-row' : ''}`}
+      className={`reveal flex cursor-pointer flex-col overflow-hidden rounded-[18px] border border-black/5 bg-white/85 backdrop-blur-md shadow-[0_10px_26px_-16px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.32)] ${featured ? 'lg:flex-row' : ''}`}
       onClick={() => onOpen(post.id)}
     >
       <div
         className={`relative bg-cover bg-center ${featured ? 'h-[220px] lg:h-auto lg:w-2/5' : 'h-[150px]'}`}
         style={{
-          backgroundImage: `linear-gradient(140deg,${post.from}cc,rgba(10,10,15,.3)), url('https://picsum.photos/seed/${post.imgSeed}/700/500')`,
+          backgroundImage: `linear-gradient(180deg,rgba(10,10,15,.15),rgba(10,10,15,.55)), url('https://picsum.photos/seed/${post.imgSeed}/700/500')`,
         }}
       >
         <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide">

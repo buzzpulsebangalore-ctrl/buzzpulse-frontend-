@@ -135,7 +135,7 @@ function GuideModal({ guide, onClose }: { guide: Guide; onClose: () => void }) {
         <div className="overflow-y-auto">
           <div
             className="relative p-8 text-white"
-            style={{ background: `linear-gradient(135deg,${guide.from},${guide.to})`, borderRadius: '26px 26px 0 0' }}
+            style={{ background: 'var(--ink)', borderRadius: '26px 26px 0 0' }}
           >
             <div className="mb-3 flex items-center gap-2">
               <span className="rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wide backdrop-blur">
@@ -177,7 +177,7 @@ function GuideCard({ guide, onOpen }: { guide: Guide; onOpen: (id: string) => vo
   return (
     <article
       ref={ref}
-      className="reveal flex cursor-pointer flex-col rounded-[18px] border border-black/5 bg-white p-6 shadow-[0_10px_26px_-16px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.32)]"
+      className="reveal flex cursor-pointer flex-col rounded-[18px] border border-black/5 bg-white/85 backdrop-blur-md p-6 shadow-[0_10px_26px_-16px_rgba(10,10,15,.25)] transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_46px_-20px_rgba(10,10,15,.32)]"
       onClick={() => onOpen(guide.id)}
     >
       <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -187,7 +187,7 @@ function GuideCard({ guide, onOpen }: { guide: Guide; onOpen: (id: string) => vo
         >
           {guide.category}
         </span>
-        <span className="rounded-full bg-[#F3EFFF] px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-(--violet)">
+        <span className="rounded-full bg-(--g-100) px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-(--ink)">
           {guide.audience}
         </span>
       </div>

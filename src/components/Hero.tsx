@@ -12,9 +12,6 @@ const searchChips = ['Fashion', 'Beauty', 'Tech', 'Gaming', 'Finance', 'Travel',
 export default function Hero() {
   return (
     <section className="hero">
-      <div className="blob b1" />
-      <div className="blob b2" />
-      <div className="blob b3" />
       <div className={`${WRAP} relative z-[2] grid items-center gap-10 lg:grid-cols-[1.05fr_.95fr] lg:gap-14`}>
         <div className="max-w-xl">
           <div className="eyebrow">
@@ -34,7 +31,7 @@ export default function Hero() {
                 key={c}
                 type="button"
                 onClick={() => scrollTo('creators')}
-                className="rounded-full border border-black/10 bg-white px-3.5 py-2 text-[13px] font-semibold text-[#4A4670] transition-colors hover:border-(--violet) hover:text-(--violet)"
+                className="rounded-full border border-black/10 bg-white/70 backdrop-blur-md px-3.5 py-2 text-[13px] font-semibold text-[#4A4670] transition-colors hover:border-(--violet) hover:text-(--violet)"
               >
                 {c}
               </button>

@@ -40,8 +40,6 @@ export default function AdminLoginPage() {
 
   return (
     <div className="admin-login-page">
-      <div className="blob b1" style={{ opacity: 0.16 }} />
-      <div className="blob b2" style={{ opacity: 0.16 }} />
       <div className="admin-login-card">
         <div className="admin-login-icon">
           <ShieldCheck size={24} strokeWidth={2} style={{ border: 'none' }} />

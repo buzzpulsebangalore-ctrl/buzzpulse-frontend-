@@ -28,7 +28,7 @@ function BrandTile({
   return (
     <div
       ref={ref}
-      className="reveal relative rounded-2xl border border-black/5 bg-white px-4 py-6 text-center shadow-[0_4px_16px_-6px_rgba(10,10,15,.12)] transition-transform hover:-translate-y-1 hover:shadow-[0_14px_28px_-12px_rgba(10,10,15,.22)]"
+      className="reveal relative rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md px-4 py-6 text-center shadow-[0_4px_16px_-6px_rgba(10,10,15,.12)] transition-transform hover:-translate-y-1 hover:shadow-[0_14px_28px_-12px_rgba(10,10,15,.22)]"
       style={{ transitionDelay: `${(index % 6) * 0.05}s` }}
     >
       <span className="absolute right-2.5 top-2.5 h-2 w-2 animate-ping rounded-full bg-(--cyan)" />

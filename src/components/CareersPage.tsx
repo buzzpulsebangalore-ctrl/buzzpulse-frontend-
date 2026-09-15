@@ -56,7 +56,7 @@ function PerkCard({ p, index }: { p: Perk; index: number }) {
   return (
     <div
       ref={ref}
-      className="reveal rounded-2xl border border-black/5 bg-white p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)]"
+      className="reveal rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)]"
       style={{ transitionDelay: `${(index % 4) * 0.07}s` }}
     >
       <div className="mb-3.5 grid h-12 w-12 place-items-center rounded-2xl bg-(--ink) text-white">
@@ -73,7 +73,7 @@ function TierCard({ t, index }: { t: TierInfo; index: number }) {
   return (
     <div
       ref={ref}
-      className="reveal rounded-2xl border border-black/5 bg-white p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)]"
+      className="reveal rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)]"
       style={{ transitionDelay: `${index * 0.08}s` }}
     >
       <span className="tag t-violet">{t.tier}</span>
@@ -173,7 +173,7 @@ export default function CareersPage() {
             {sampleBrands.map((b) => (
               <div
                 key={b.name}
-                className="rounded-2xl border border-black/5 bg-white px-4 py-6 text-center shadow-[0_4px_16px_-6px_rgba(10,10,15,.12)]"
+                className="rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md px-4 py-6 text-center shadow-[0_4px_16px_-6px_rgba(10,10,15,.12)]"
               >
                 <div
                   className="display mx-auto mb-3 grid h-12 w-12 place-items-center rounded-xl text-base text-white"
@@ -190,7 +190,7 @@ export default function CareersPage() {
               const Icon = b.icon;
               return (
                 <div key={b.title} className="flex items-start gap-3">
-                  <div className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-[#F3EFFF] text-(--violet)">
+                  <div className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-(--g-100) text-(--ink)">
                     <Icon size={18} strokeWidth={1.8} style={{ border: 'none' }} />
                   </div>
                   <div>

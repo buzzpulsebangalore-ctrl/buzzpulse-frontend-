@@ -128,14 +128,14 @@ export default function Nav() {
     <nav>
       <div className={`${WRAP} nav-in`}>
         <Link to="/" className="logo">
-          <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={82} height={40} />
+          <img src="/BP-logo-transparent.png" alt="BuzzPulse" className="logo-full" width={158} height={38} />
         </Link>
         <div className="nav-links" ref={groupsRef}>
           {navGroups.map((g) => (
             <div key={g.label} className="relative">
               <button
                 type="button"
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-semibold text-(--ink) rounded-lg hover:bg-[#F3EFFF] transition-colors"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm font-semibold text-(--ink) rounded-lg hover:bg-(--g-100) transition-colors"
                 onClick={() => setOpenGroup((o) => (o === g.label ? null : g.label))}
                 aria-expanded={openGroup === g.label}
               >
@@ -148,13 +148,13 @@ export default function Nav() {
                 />
               </button>
               {openGroup === g.label && (
-                <div className="absolute left-1/2 top-[calc(100%+10px)] z-50 w-72 -translate-x-1/2 rounded-2xl border border-black/5 bg-white p-3 shadow-[0_24px_48px_-18px_rgba(10,10,15,.35)]">
+                <div className="absolute left-1/2 top-[calc(100%+10px)] z-50 w-72 -translate-x-1/2 rounded-2xl border border-black/5 bg-white/85 p-3 shadow-[0_24px_48px_-18px_rgba(10,10,15,.35)] backdrop-blur-xl">
                   {g.links.map((l) => (
                     <GroupLink
                       key={l.id}
                       id={l.id}
                       onNavigate={() => setOpenGroup(null)}
-                      className="block rounded-xl px-4 py-3 transition-colors hover:bg-[#F3EFFF]"
+                      className="block rounded-xl px-4 py-3 transition-colors hover:bg-(--g-100)"
                     >
                       <span className="block text-sm font-bold text-(--ink)">{l.label}</span>
                       {l.desc && <span className="mt-0.5 block text-xs text-[#68687A]">{l.desc}</span>}

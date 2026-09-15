@@ -24,13 +24,10 @@ function FeatureCard({ f, index }: { f: Feature; index: number }) {
   return (
     <div
       ref={ref}
-      className="reveal rounded-[20px] border border-black/5 bg-white p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)] transition-transform hover:-translate-y-1.5"
+      className="reveal rounded-[20px] border border-black/5 bg-white/85 backdrop-blur-md p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)] transition-transform hover:-translate-y-1.5"
       style={{ transitionDelay: `${(index % 3) * 0.07}s` }}
     >
-      <div
-        className="mb-4 grid h-14 w-14 place-items-center rounded-2xl text-white"
-        style={{ background: `linear-gradient(135deg, var(${f.color}), var(--violet))` }}
-      >
+      <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-(--ink) text-white">
         <Icon size={24} strokeWidth={1.8} style={{ border: 'none' }} />
       </div>
       <h3 className="mb-2 text-[19px] font-bold">{f.title}</h3>

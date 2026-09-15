@@ -38,7 +38,7 @@ function WallCard({ creator, avatarSeed, live }: { creator: PublicCreator; avata
             <div className="truncate text-[11px] font-semibold text-[#68687A]">{creator.handle}</div>
           </div>
         </div>
-        <span className="mb-2.5 inline-block rounded-full bg-[#F3EFFF] px-2.5 py-1 text-[10px] font-bold text-(--violet)">
+        <span className="mb-2.5 inline-block rounded-full bg-(--g-100) px-2.5 py-1 text-[10px] font-bold text-(--ink)">
           {creator.niches[0]}
         </span>
         <div className="flex justify-between border-t border-dashed border-black/10 pt-2.5">

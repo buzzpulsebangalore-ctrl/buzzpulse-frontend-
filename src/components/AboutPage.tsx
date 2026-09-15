@@ -42,7 +42,7 @@ function ValueCard({ v, index }: { v: Value; index: number }) {
   return (
     <div
       ref={ref}
-      className="reveal rounded-[20px] border border-black/5 bg-white p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)]"
+      className="reveal rounded-[20px] border border-black/5 bg-white/85 backdrop-blur-md p-6 shadow-[0_10px_30px_-12px_rgba(10,10,15,.15)]"
       style={{ transitionDelay: `${(index % 4) * 0.07}s` }}
     >
       <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-(--ink) text-white">
@@ -100,7 +100,7 @@ export default function AboutPage() {
               as we grow.
             </p>
           </div>
-          <div className="rounded-[24px] border border-black/5 bg-white p-8 shadow-[0_20px_44px_-20px_rgba(10,10,15,.25)]">
+          <div className="rounded-[24px] border border-black/5 bg-white/85 backdrop-blur-md p-8 shadow-[0_20px_44px_-20px_rgba(10,10,15,.25)]">
             <p className="mb-6 text-[15px] leading-relaxed text-[#34343C]">
               &ldquo;We didn't want to build another marketplace that just lists names and follower counts. We wanted
               something we'd actually trust to book a creator for our own campaign.&rdquo;
