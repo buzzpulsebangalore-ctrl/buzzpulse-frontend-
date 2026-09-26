@@ -16,13 +16,13 @@ export default function AIVideos() {
   }, [active]);
 
   return (
-    <section id="ai-content" className={`${SECTION_PAD} bg-[#F7F7FA]`}>
+    <section id="content-showcase" className={`${SECTION_PAD} bg-[#F7F7FA]`}>
       <div className={WRAP}>
         <div className="shead">
-          <span className="tag t-cyan">AI-generated content</span>
-          <h2>AI creators, talking about brands.</h2>
+          <span className="tag t-cyan">Digitally-generated content</span>
+          <h2>Digital creators, talking about brands.</h2>
           <p>
-            Sample spots produced with AI avatars — makeup, mobiles, skincare, food and more. Fully
+            Sample spots produced with digital avatars — makeup, mobiles, skincare, food and more. Fully
             brand-customisable, ready for Reels and Shorts. (Demo previews.)
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function AIVideos() {
               />
               <div className="absolute inset-0 bg-linear-to-b from-black/5 via-transparent to-black/80" />
               <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[9px] font-extrabold uppercase tracking-wide text-(--ink) backdrop-blur">
-                ✦ AI Avatar
+                ✦ Digital Avatar
               </span>
               <span className="absolute right-2 top-2 rounded-md bg-black/70 px-1.5 py-1 font-mono text-[10px] font-bold text-white">
                 {v.duration}
@@ -95,7 +95,7 @@ export default function AIVideos() {
               <X size={18} style={{ border: 'none' }} />
             </button>
             <div className="absolute left-3.5 right-14 top-3.5 text-[11px] font-semibold text-white/85">
-              Demo preview — sample AI-generated spot
+              Demo preview — sample digitally-generated spot
             </div>
             <div className="absolute inset-0 grid place-items-center">
               <div className="grid h-16 w-16 place-items-center rounded-full bg-white/95 text-(--ink)">

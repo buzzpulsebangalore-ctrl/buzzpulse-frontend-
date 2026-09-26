@@ -23,6 +23,9 @@ import JoinPage from './components/JoinPage';
 import CreatorApplyPage from './components/CreatorApplyPage';
 import BrandApplyPage from './components/BrandApplyPage';
 import AboutPage from './components/AboutPage';
+import WhyUsPage from './components/WhyUsPage';
+import OurStoryPage from './components/OurStoryPage';
+import OurTeamPage from './components/OurTeamPage';
 import ContactPage from './components/ContactPage';
 import CaseStudiesPage from './components/CaseStudiesPage';
 import CareersPage from './components/CareersPage';
@@ -65,6 +68,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/why-us" element={<WhyUsPage />} />
+        <Route path="/our-story" element={<OurStoryPage />} />
+        <Route path="/our-team" element={<OurTeamPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/case-studies" element={<CaseStudiesPage />} />
         <Route path="/careers" element={<CareersPage />} />

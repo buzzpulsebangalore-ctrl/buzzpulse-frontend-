@@ -28,11 +28,11 @@ const seoGroups: Record<string, string[]> = {
     'Tech Coding Influencers', 'Cybersecurity Influencers', 'Digital Marketing Influencers', 'Crypto Influencers',
     'Artificial Intelligence Influencers', 'Mumbai Tech Influencers',
   ],
-  'Travel & Food': [
-    'Healthy Food Influencers', 'Travel Influencers', 'Food Influencers', 'Coffee Influencers', 'Cooking Influencers',
-    'Motorcycle Influencers', 'Vegan Influencers', 'Female Travel Influencers', 'Kolkata Food Influencers',
+  'Travel, Tourism & Food': [
+    'Healthy Food Influencers', 'Travel & Tourism Influencers', 'Food Influencers', 'Coffee Influencers', 'Cooking Influencers',
+    'Motorcycle Influencers', 'Vegan Influencers', 'Female Travel & Tourism Influencers', 'Kolkata Food Influencers',
     'Delhi Food Influencers', 'Pune Food Influencers', 'Hyderabad Food Influencers', 'Bangalore Food Influencers',
-    'Jaipur Food Influencers', 'Mumbai Food Influencers', 'Couple Travel Influencers', 'Mumbai Travel Influencers',
+    'Jaipur Food Influencers', 'Mumbai Food Influencers', 'Couple Travel & Tourism Influencers', 'Mumbai Travel & Tourism Influencers',
   ],
   'Fitness & Sports': [
     'Golf Influencers', 'Mental Health Influencers', 'Health Influencers', 'Yoga Influencers', 'Running Influencers',
@@ -199,7 +199,7 @@ export default function Footer() {
                 <Link to="/#process">Our Process</Link>
               </li>
               <li>
-                <Link to="/#ai-content">AI Content Showcase</Link>
+                <Link to="/#content-showcase">Content Showcase</Link>
               </li>
             </ul>
           </div>
@@ -207,13 +207,22 @@ export default function Footer() {
             <h4>Company</h4>
             <ul>
               <li>
-                <Link to="/about">About</Link>
+                <Link to="/about">About Us</Link>
+              </li>
+              <li>
+                <Link to="/why-us">Why Us</Link>
+              </li>
+              <li>
+                <Link to="/our-story">Our Story</Link>
+              </li>
+              <li>
+                <Link to="/our-team">Our Team</Link>
               </li>
               <li>
                 <Link to="/careers">Careers</Link>
               </li>
               <li>
-                <Link to="/contact">Contact</Link>
+                <Link to="/contact">Contact Us</Link>
               </li>
             </ul>
           </div>

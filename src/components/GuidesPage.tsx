@@ -27,7 +27,7 @@ const guides: Guide[] = [
     summary: 'From objective to a live creator shortlist in five steps — what to have ready before you start.',
     steps: [
       'Define one measurable objective (installs, sales, awareness) and a rough budget range before searching for creators.',
-      'Use AI Creator Search to filter by niche, platform, audience geography and minimum fit score.',
+      'Use Smart Creator Search to filter by niche, platform, audience geography and minimum fit score.',
       'Shortlist 15-20% more creators than you plan to book — some will decline or be mid-campaign already.',
       'Send briefs through the platform so approvals, deadlines and content stay in one thread per creator.',
       'Set up UTM links or promo codes for every creator before content goes live, not after.',
@@ -267,10 +267,10 @@ export default function GuidesPage() {
           <h2>Let&rsquo;s build something people talk about.</h2>
           <p>Tell us the objective. We&rsquo;ll come back with a campaign, a creator list and a number.</p>
           <div className="final-cta-actions">
-            <Link to="/join/brand" className="btn btn-white btn-lg">
+            <Link to="/join/brand" className="btn btn-ink btn-lg">
               Launch a campaign
             </Link>
-            <Link to="/join/creator" className="btn btn-ink btn-lg">
+            <Link to="/join/creator" className="btn btn-ghost btn-lg">
               Join as a creator
             </Link>
           </div>

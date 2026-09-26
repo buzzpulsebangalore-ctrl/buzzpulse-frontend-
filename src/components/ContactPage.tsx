@@ -237,16 +237,12 @@ export default function ContactPage() {
       </section>
 
       <section className="final-cta relative overflow-hidden">
-        <div
-          className="pointer-events-none absolute -top-24 left-1/2 h-90 w-90 -translate-x-1/2 rounded-full bg-white/25 blur-[100px]"
-          aria-hidden="true"
-        />
         <div className={`${WRAP} final-cta-in relative`}>
           <Mail size={30} strokeWidth={2} className="mx-auto mb-5" style={{ border: 'none' }} />
           <h2>Not ready to talk yet?</h2>
           <p>Have a look at our real campaign results first, or just jump straight in as a brand or a creator.</p>
           <div className="final-cta-actions">
-            <Link to="/case-studies" className="btn btn-white btn-lg">
+            <Link to="/case-studies" className="btn btn-ghost btn-lg">
               See case studies
             </Link>
             <Link to="/join" className="btn btn-ink btn-lg">

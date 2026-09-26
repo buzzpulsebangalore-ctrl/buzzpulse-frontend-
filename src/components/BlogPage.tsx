@@ -292,10 +292,10 @@ export default function BlogPage() {
           <h2>Let&rsquo;s build something people talk about.</h2>
           <p>Tell us the objective. We&rsquo;ll come back with a campaign, a creator list and a number.</p>
           <div className="final-cta-actions">
-            <Link to="/join/brand" className="btn btn-white btn-lg">
+            <Link to="/join/brand" className="btn btn-ink btn-lg">
               Launch a campaign
             </Link>
-            <Link to="/contact" className="btn btn-ink btn-lg">
+            <Link to="/contact" className="btn btn-ghost btn-lg">
               Contact us
             </Link>
           </div>

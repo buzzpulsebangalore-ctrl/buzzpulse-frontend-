@@ -218,7 +218,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: 'treknest',
     brand: 'TrekNest',
-    industry: 'Travel',
+    industry: 'Travel & Tourism',
     platform: 'Multi-platform',
     from: '#FF7A00',
     to: '#2F6FED',
@@ -260,7 +260,7 @@ const metrics: [string, string][] = [
 
 const timeline: { icon: LucideIcon; title: string; desc: string }[] = [
   { icon: ClipboardList, title: 'Brief', desc: 'Goals and KPIs locked' },
-  { icon: Search, title: 'Discovery', desc: 'AI creator shortlist' },
+  { icon: Search, title: 'Discovery', desc: 'Smart creator shortlist' },
   { icon: Mail, title: 'Outreach', desc: 'Contracts and briefs' },
   { icon: Clapperboard, title: 'Content', desc: 'Creation and approvals' },
   { icon: Rocket, title: 'Launch', desc: 'Go live, all channels' },
@@ -270,8 +270,8 @@ const timeline: { icon: LucideIcon; title: string; desc: string }[] = [
 const whyUs: { icon: LucideIcon; title: string; desc: string }[] = [
   {
     icon: Bot,
-    title: 'AI creator discovery',
-    desc: 'Search 10M+ profiles by intent and get AI-ranked fit scores.',
+    title: 'Smart creator discovery',
+    desc: 'Search 10M+ profiles by intent and get automatically ranked fit scores.',
   },
   {
     icon: ShieldCheck,
@@ -343,7 +343,7 @@ const industries: { icon: LucideIcon; label: string }[] = [
   { icon: HeartPulse, label: 'Healthcare' },
   { icon: Laptop, label: 'Technology' },
   { icon: GraduationCap, label: 'Education' },
-  { icon: Plane, label: 'Travel' },
+  { icon: Plane, label: 'Travel & Tourism' },
   { icon: Smartphone, label: 'Electronics' },
 ];
 
@@ -354,7 +354,7 @@ const faqs: [string, string][] = [
   ],
   [
     'How are creators selected for a campaign?',
-    'Our AI shortlists creators by audience fit, engagement authenticity and brand safety. A strategist then curates the final list, and every profile is screened for fake followers before activation.',
+    'Our matching engine shortlists creators by audience fit, engagement authenticity and brand safety. A strategist then curates the final list, and every profile is screened for fake followers before activation.',
   ],
   [
     'How long does a campaign take to launch?',

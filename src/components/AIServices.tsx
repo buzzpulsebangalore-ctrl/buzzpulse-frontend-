@@ -10,12 +10,12 @@ interface AiService {
 }
 
 const aiServices: AiService[] = [
-  { icon: Search, title: 'AI Creator Search', desc: 'Describe your campaign in plain language — get a ranked shortlist in seconds.', cls: 's1' },
-  { icon: Target, title: 'AI Match Score', desc: 'Fit score per creator from audience overlap, brand safety and past performance.', cls: 's2' },
+  { icon: Search, title: 'Smart Creator Search', desc: 'Describe your campaign in plain language — get a ranked shortlist in seconds.', cls: 's1' },
+  { icon: Target, title: 'Smart Match Score', desc: 'Fit score per creator from audience overlap, brand safety and past performance.', cls: 's2' },
   { icon: ShieldAlert, title: 'Fraud & Fake Follower Detection', desc: 'Flag bought followers and engagement pods before you spend a rupee.', cls: 's3' },
-  { icon: FileSignature, title: 'AI Brief & Contract Generator', desc: 'Auto-draft content briefs, proposals and contracts from your goal.', cls: 's4' },
-  { icon: LineChart, title: 'AI ROI Prediction', desc: 'Forecast reach, engagement and cost-per-result before launch.', cls: 's5' },
-  { icon: MessagesSquare, title: 'AI Campaign Assistant', desc: 'A chat copilot that optimises live campaigns and writes your reports.', cls: 's6' },
+  { icon: FileSignature, title: 'Smart Brief & Contract Generator', desc: 'Auto-draft content briefs, proposals and contracts from your goal.', cls: 's4' },
+  { icon: LineChart, title: 'Smart ROI Prediction', desc: 'Forecast reach, engagement and cost-per-result before launch.', cls: 's5' },
+  { icon: MessagesSquare, title: 'Smart Campaign Assistant', desc: 'A chat copilot that optimises live campaigns and writes your reports.', cls: 's6' },
 ];
 
 function AiServiceCard({ service, index }: { service: AiService; index: number }) {
@@ -36,12 +36,12 @@ function AiServiceCard({ service, index }: { service: AiService; index: number }
 
 export default function AIServices() {
   return (
-    <section id="ai-engine" className={SECTION_PAD}>
+    <section id="engine" className={SECTION_PAD}>
       <div className={WRAP}>
         <div className="shead">
-          <span className="tag t-cyan">AI engine</span>
+          <span className="tag t-cyan">Match engine</span>
           <h2>The intelligence layer.</h2>
-          <p>A stack of AI models working behind every search, brief and report.</p>
+          <p>A stack of smart models working behind every search, brief and report.</p>
         </div>
         <div className="svc-grid">
           {aiServices.map((s, i) => (

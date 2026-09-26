@@ -19,7 +19,7 @@ function WallCard({ creator, avatarSeed, live }: { creator: PublicCreator; avata
           </span>
         )}
         <span className="absolute right-2 top-2 rounded-full bg-black/80 px-2 py-1 font-mono text-[10px] font-bold text-white">
-          AI <b className="text-(--coral)">{90 + (avatarSeed % 9)}%</b>
+          Match <b className="text-(--coral)">{90 + (avatarSeed % 9)}%</b>
         </span>
       </div>
       <div className="p-3">

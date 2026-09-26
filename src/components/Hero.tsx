@@ -7,7 +7,7 @@ function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 }
 
-const searchChips = ['Fashion', 'Beauty', 'Tech', 'Gaming', 'Finance', 'Travel', 'Food'];
+const searchChips = ['Fashion', 'Beauty', 'Tech', 'Gaming', 'Finance', 'Travel & Tourism', 'Food'];
 
 export default function Hero() {
   return (
@@ -18,7 +18,7 @@ export default function Hero() {
             <span className="dot" /> 12,400+ creators live right now
           </div>
           <h1 className="mb-5 text-[clamp(38px,5.6vw,72px)]">
-            Discover the <span className="grad-text">perfect creator</span> with AI.
+            Discover the <span className="grad-text">perfect creator</span>.
           </h1>
           <p className="mb-7 max-w-[520px] text-lg leading-relaxed text-[#34343C]">
             India&rsquo;s premier platform for influencer marketing, destination branding, events and public

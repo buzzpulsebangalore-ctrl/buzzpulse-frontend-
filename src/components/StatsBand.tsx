@@ -9,7 +9,7 @@ const stats = [
 
 export default function StatsBand() {
   return (
-    <section className={`bg-(--ink) text-center text-white ${SECTION_PAD}`}>
+    <section className={`bg-(--ink) text-center text-white border-b border-white/10 ${SECTION_PAD}`}>
       <div className={`${WRAP} grid grid-cols-2 gap-8 md:grid-cols-4`}>
         {stats.map((s) => (
           <div key={s.label}>

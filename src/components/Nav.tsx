@@ -21,7 +21,7 @@ const navGroups: NavGroup[] = [
     label: 'Platform',
     links: [
       { id: 'creators', label: 'Creator Network', desc: 'Verified creators, filter & book' },
-      { id: 'ai-engine', label: 'AI Engine', desc: 'Search, match score & fraud detection' },
+      { id: 'engine', label: 'Match Engine', desc: 'Search, match score & fraud detection' },
       { id: 'features', label: 'Platform Features', desc: 'Discovery to reporting, one workspace' },
     ],
   },
@@ -30,7 +30,7 @@ const navGroups: NavGroup[] = [
     links: [
       { id: 'services', label: 'What We Do', desc: 'Six ways we build the buzz' },
       { id: 'process', label: 'Our Process', desc: 'Discover, design, deliver, drive' },
-      { id: 'ai-content', label: 'AI Content Showcase', desc: 'Sample AI-generated brand spots' },
+      { id: 'content-showcase', label: 'Content Showcase', desc: 'Sample digitally-generated brand spots' },
     ],
   },
   {
@@ -47,6 +47,17 @@ const navGroups: NavGroup[] = [
       { id: 'blog', label: 'Blog', desc: 'Strategy, ROI and product updates' },
       { id: 'guides', label: 'Guides', desc: 'Step-by-step how-tos for brands & creators' },
       { id: 'case-studies', label: 'Case Studies', desc: 'Real campaigns, real numbers' },
+    ],
+  },
+  {
+    label: 'Company',
+    links: [
+      { id: 'about', label: 'About Us', desc: 'Who we are and what we do' },
+      { id: 'why-us', label: 'Why Us', desc: 'What makes our platform different' },
+      { id: 'our-story', label: 'Our Story', desc: 'Founder journey, milestones and vision' },
+      { id: 'our-team', label: 'Our Team', desc: 'The people behind BuzzPulse' },
+      { id: 'careers', label: 'Careers', desc: 'Open positions and opportunities' },
+      { id: 'contact', label: 'Contact Us', desc: 'Sales, partnerships and general enquiries' },
     ],
   },
 ];
@@ -76,7 +87,14 @@ function GroupLink({
       </Link>
     );
   }
-  if (id === 'blog' || id === 'guides') {
+  if (id === 'blog' || id === 'guides' || id === 'careers' || id === 'contact') {
+    return (
+      <Link to={`/${id}`} onClick={onNavigate} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  if (id === 'about' || id === 'why-us' || id === 'our-story' || id === 'our-team') {
     return (
       <Link to={`/${id}`} onClick={onNavigate} className={className}>
         {children}
@@ -135,7 +153,7 @@ export default function Nav() {
             <div key={g.label} className="relative">
               <button
                 type="button"
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-semibold text-(--ink) rounded-lg hover:bg-(--g-100) transition-colors"
+                className={`flex items-center gap-1 px-3 py-1.5 text-sm font-semibold rounded-lg hover:bg-(--g-100) transition-colors ${g.label === 'Solutions' ? 'text-(--amber)' : 'text-(--ink)'}`}
                 onClick={() => setOpenGroup((o) => (o === g.label ? null : g.label))}
                 aria-expanded={openGroup === g.label}
               >
@@ -148,7 +166,7 @@ export default function Nav() {
                 />
               </button>
               {openGroup === g.label && (
-                <div className="absolute left-1/2 top-[calc(100%+10px)] z-50 w-72 -translate-x-1/2 rounded-2xl border border-black/5 bg-white/85 p-3 shadow-[0_24px_48px_-18px_rgba(10,10,15,.35)] backdrop-blur-xl">
+                <div className="nav-panel absolute left-1/2 top-[calc(100%+10px)] z-50 w-72 -translate-x-1/2 rounded-2xl border border-black/5 p-3 shadow-[0_24px_48px_-18px_rgba(10,10,15,.35)]">
                   {g.links.map((l) => (
                     <GroupLink
                       key={l.id}
@@ -196,7 +214,7 @@ export default function Nav() {
                 <button
                   type="button"
                   onClick={() => setMobileOpenGroup(isOpen ? null : g.label)}
-                  className="flex w-full items-center justify-between py-3.5 text-left text-[15px] font-bold text-(--ink)"
+                  className={`flex w-full items-center justify-between py-3.5 text-left text-[15px] font-bold ${g.label === 'Solutions' ? 'text-(--amber)' : 'text-(--ink)'}`}
                   aria-expanded={isOpen}
                 >
                   {g.label}

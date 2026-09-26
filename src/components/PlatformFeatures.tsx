@@ -10,7 +10,7 @@ interface Feature {
 }
 
 const features: Feature[] = [
-  { icon: Search, color: '--hot', title: 'AI Discovery', desc: 'Search verified creators by plain-language intent, not keywords.' },
+  { icon: Search, color: '--hot', title: 'Smart Discovery', desc: 'Search verified creators by plain-language intent, not keywords.' },
   { icon: Users, color: '--violet', title: 'Creator CRM', desc: 'Track every creator relationship, note and past collaboration in one place.' },
   { icon: Rocket, color: '--cyan', title: 'Campaign Manager', desc: 'Briefs, approvals, deliverables and milestones on one timeline.' },
   { icon: FileText, color: '--amber', title: 'Contracts & Payments', desc: 'E-sign contracts and pay creators — invoices handled automatically.' },

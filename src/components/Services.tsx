@@ -22,8 +22,8 @@ const solutions: Solution[] = [
   },
   {
     icon: Bot,
-    title: 'AI-Generated Influencer Content',
-    desc: 'Promote your products with high-performing videos featuring AI avatars, built to your brand’s requirements. Perfect for social media and audience education.',
+    title: 'Digitally-Generated Influencer Content',
+    desc: 'Promote your products with high-performing videos featuring digital avatars, built to your brand’s requirements. Perfect for social media and audience education.',
   },
   {
     icon: Share2,

@@ -9,6 +9,13 @@ import {
   ShieldCheck,
   LayoutDashboard,
   ArrowRight,
+  Users,
+  PenTool,
+  Compass,
+  Clapperboard,
+  Megaphone,
+  Video,
+  Headset,
   type LucideIcon,
 } from 'lucide-react';
 import Ticker from './Ticker';
@@ -44,9 +51,19 @@ const tiers: TierInfo[] = [
   { tier: 'Macro', range: '100K+ followers', desc: 'Mass reach for national launches, tourism campaigns and government programmes.' },
 ];
 
+const roles: { icon: LucideIcon; title: string }[] = [
+  { icon: Users, title: 'Creators' },
+  { icon: PenTool, title: 'Content Writing' },
+  { icon: Compass, title: 'Direction' },
+  { icon: Clapperboard, title: 'Production' },
+  { icon: Megaphone, title: 'Digital Marketing' },
+  { icon: Video, title: 'Videographers' },
+  { icon: Headset, title: 'Tech Support' },
+];
+
 const brandPoints: { icon: LucideIcon; title: string; desc: string }[] = [
   { icon: BadgeCheck, title: 'Verified, always', desc: 'Every creator is reviewed by hand before their profile goes live.' },
-  { icon: Sparkles, title: 'AI-matched', desc: 'Match Score and fraud detection surface the right fit before you spend a rupee.' },
+  { icon: Sparkles, title: 'Smart-matched', desc: 'Match Score and fraud detection surface the right fit before you spend a rupee.' },
   { icon: LayoutDashboard, title: 'One workspace', desc: 'Discovery, briefs, contracts, payments and reporting — no spreadsheets and DMs.' },
 ];
 
@@ -137,6 +154,32 @@ export default function CareersPage() {
             {creatorPerks.map((p, i) => (
               <PerkCard key={p.title} p={p} index={i} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={SECTION_PAD}>
+        <div className={WRAP}>
+          <div className="shead">
+            <span className="tag t-violet">Ways to work with us</span>
+            <h2>Not just on-camera talent.</h2>
+            <p>We book across the full production chain, not just creators.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
+            {roles.map((r) => {
+              const Icon = r.icon;
+              return (
+                <div
+                  key={r.title}
+                  className="flex flex-col items-center gap-2.5 rounded-2xl border border-black/5 bg-white/85 backdrop-blur-md px-3 py-5 text-center shadow-[0_4px_16px_-6px_rgba(10,10,15,.12)]"
+                >
+                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-(--ink) text-white">
+                    <Icon size={18} strokeWidth={1.8} style={{ border: 'none' }} />
+                  </div>
+                  <span className="text-[13px] font-bold leading-tight">{r.title}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

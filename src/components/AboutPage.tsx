@@ -133,11 +133,21 @@ export default function AboutPage() {
           <div>
             <span className="tag t-cyan">Who we work with</span>
             <h2 className="mb-4 text-[clamp(28px,3.6vw,42px)]">Brands, tourism boards and government.</h2>
-            <p className="text-[15px] leading-relaxed text-[#54506E]">
+            <p className="mb-5 text-[15px] leading-relaxed text-[#54506E]">
               From a single product launch with a handful of creators to a multi state tourism campaign or a
               national awareness programme, it's the same vetted network and the same hands on team, just scaled to
               fit the brief.
             </p>
+            <div className="flex flex-wrap gap-2">
+              {['Education Department', 'Welfare', 'Infrastructure', 'Health', 'Tourism', 'Transport'].map((s) => (
+                <span
+                  key={s}
+                  className="rounded-full border border-black/10 bg-white px-3.5 py-1.5 text-[13px] font-semibold text-(--ink)"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
           </div>
           <div>
             <span className="tag t-amber">Who we're for</span>
@@ -170,10 +180,10 @@ export default function AboutPage() {
           <h2>Let's build something people talk about.</h2>
           <p>Tell us the objective. We'll come back with a campaign, a creator list and a number.</p>
           <div className="final-cta-actions">
-            <Link to="/join/brand" className="btn btn-white btn-lg">
+            <Link to="/join/brand" className="btn btn-ink btn-lg">
               Launch a campaign
             </Link>
-            <Link to="/join/creator" className="btn btn-ink btn-lg">
+            <Link to="/join/creator" className="btn btn-ghost btn-lg">
               Join as a creator
             </Link>
           </div>
